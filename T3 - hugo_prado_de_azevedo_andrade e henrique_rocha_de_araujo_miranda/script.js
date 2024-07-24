@@ -4,10 +4,94 @@ function formularioCliente(){
     cadastroCliente.style.display = "block";
 }
 
-function validarCpf(){
-
+//VERIFICACAO STRINGS DO CPF
+function apenasNumeros(string){
+    return /^\d+$/.test(string);
 }
 
+function verificarNumeros(string){
+    for (let i = 1; i < string.length; i++){
+        if (string[i] !== string[0]){
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+//VERIFICACAO DO CPF
+function verificarPrimeiroD(string, ver){
+    let numero = 0;
+    let aux = 10;
+    let verN = 0;
+
+    for(let i = 0; i < 9; i++){
+        numero += parseInt(string[i])*aux;
+
+        aux--;
+    }
+
+    let resto = numero % 11;
+
+    if(resto == 1 || resto == 0){
+        verN = 0;
+    }
+    else if(resto >= 2 && resto <= 10){
+        verN = 11 - resto;
+    }
+    //console.log(verN == ver[0]);
+
+    return verN == ver[0];
+}
+
+function verificarSegundoD(string, ver){
+    let numero = 0;
+    let aux = 11;
+    let verN = 0;
+    
+    for(let i = 0; i < 10; i++){
+        numero += parseInt(string[i])*aux;
+
+        aux--;
+    }
+
+    let resto = numero % 11;
+
+    if(resto == 1 || resto == 0){
+        verN = 0
+    }
+    else if(resto >= 2 && resto <= 10){
+        verN = 11 - resto;
+    }
+    //console.log(verN == ver[1]);
+
+    return verN == ver[1];
+}
+
+function validarCpf(cpfN){
+    let stringCpfN = cpfN.toString();
+
+    if(stringCpfN.length == 11){
+        if(apenasNumeros(stringCpfN) == true){
+            if(verificarNumeros(stringCpfN) == false){
+                let parte1 = stringCpfN.substring(0, 9);
+                let parte2 = stringCpfN.substring(0, 10);
+                let verificador = stringCpfN.substring(9);
+
+                if(verificarPrimeiroD(parte1, verificador) && verificarSegundoD(parte2, verificador)){
+                    return true;
+                }
+            }
+        }
+    }
+    else{
+        let erro = document.getElementById("cpfErro");
+
+        erro.innerHTML = "CPF inválido!";
+    }
+}
+
+//VERIFICACAO NOME
 function validarNome(name){
     if(name.length >= 4 && name.length <= 80){
         return true;
@@ -19,6 +103,9 @@ function validarNome(name){
     }
 }
 
+//interface Usuario = {}
+
+//VERIFICACAO DATA
 function validarIdade(data){
     let erro = document.getElementById("dataErro");
     let dataNascimento = new Date(data);
@@ -38,13 +125,14 @@ function validarIdade(data){
 }
 
 function salvarCliente(){
-    let cpf = document.getElementById("cpfTxt");
+    let cpf = document.getElementById("cpfTxt").value;
     let nome = document.getElementById("nomeTxt").value.trim();
     let data_nascimento = document.getElementById("dataTxt").value;
 
-    validarCpf();
-    validarNome(nome);
-    validarIdade(data_nascimento);
+    let cliente = {cpf: cpf,nome: nome,data: data_nascimento};
+    //CADASTRAR CLIENTE
+    let clientes = [];
+    clientes.push(cliente);
 }
 
 /*function main(){
