@@ -10,7 +10,7 @@
             <dl>
                 <dt>Cliente</dt>
                     <dd><button id="incluirCliente" onclick="formularioCliente()">Incluir</button></dd>
-                    <dd><button>Consultar</button></dd>
+                    <dd><button id="consultarCliente" onclick="consultarCliente()">Consultar</button></dd>
                 <dt>Veículo</dt>
                     <dd><button>Incluir</button></dd>
                     <dd><button>Consultar</button></dd>
@@ -37,7 +37,7 @@
             </div>
             <div class="consultarCliente">
                 <h2>Lista de Clientes</h2>
-                <table>
+                <table id="tabela">
                     <tr>
                         <th>CPF</th>
                         <th>Nome</th>
@@ -56,6 +56,6 @@
                 </table>
             </div>
         </div>
-        <script src="script.js">main()</script>
+        <script src="script.js"></script>
     </body>
 </html>
