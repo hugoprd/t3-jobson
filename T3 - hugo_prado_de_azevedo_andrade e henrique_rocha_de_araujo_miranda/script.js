@@ -1,8 +1,7 @@
 var cadastroCliente = document.querySelector(".incluirCliente");
+var consultaCliente = document.querySelector(".consultarCliente");
 
-function formularioCliente(){
-    cadastroCliente.style.display = "block";
-}
+let cliente;
 
 //VERIFICACAO STRINGS DO CPF
 function apenasNumeros(string){
@@ -79,7 +78,7 @@ function validarCpf(cpfN){
                 let verificador = stringCpfN.substring(9);
 
                 if(verificarPrimeiroD(parte1, verificador) && verificarSegundoD(parte2, verificador)){
-                    return true;
+                    return cpfN;
                 }
             }
         }
@@ -94,7 +93,7 @@ function validarCpf(cpfN){
 //VERIFICACAO NOME
 function validarNome(name){
     if(name.length >= 4 && name.length <= 80){
-        return true;
+        return name;
     }
     else{
         let erro = document.getElementById("nomeErro");
@@ -102,8 +101,6 @@ function validarNome(name){
         erro.innerHTML = "Nome deve ter de 4 a 80 caractéres!";
     }
 }
-
-//interface Usuario = {}
 
 //VERIFICACAO DATA
 function validarIdade(data){
@@ -114,7 +111,7 @@ function validarIdade(data){
     let idade = Math.floor(diferenca / (1000 * 60 * 60 * 24 * 365.25));
 
     if(idade >= 18){
-        return true;
+        return data;
     }
     else if(idade < 18){
         erro.innerHTML = "Cliente tem " + idade + " anos. Deve ter pelo menos 18!";
@@ -124,17 +121,91 @@ function validarIdade(data){
     }
 }
 
+function criarCliente(c, n, d){ //cpf nome data
+    return {cpf: c, nome: n, data: d};
+}
+
+function salvarTabela(c, n, d){
+    let tabela = document.getElementById("tabela");
+    let dados = [];
+
+    // Percorre as linhas da tabela (exceto a primeira que é o cabeçalho)
+    for (let i = 1; i < tabela.rows.length; i++){
+        let linha = tabela.rows[i];
+        let c = linha.cells[0].textContent;
+        let n = linha.cells[1].textContent;
+        let d = linha.cells[2].textContent;
+        dados.push({c, n, d});
+    }
+
+    localStorage.setItem('dadosTabela', JSON.stringify(dados));
+    //alert('Tabela salva no localStorage!');
+}
+
+function carregarTabela(){
+    let dadosSalvos = localStorage.getItem('dadosTabela');
+
+    if(dadosSalvos){
+        let dados = JSON.parse(dadosSalvos);
+        let tabela = document.getElementById('tabelaDados');
+
+        // Limpa as linhas existentes na tabela
+        while (tabela.rows.length > 1){
+            tabela.deleteRow(1);
+        }
+
+        // Adiciona as linhas salvas de volta na tabela
+        dados.forEach(dado => {
+            let novaLinha = tabela.insertRow();
+            novaLinha.insertCell().textContent = dado.c;
+            novaLinha.insertCell().textContent = dado.n;
+            novaLinha.insertCell().textContent = dado.d;
+        });
+    }
+}
+
+function limparLocalStorage(){
+    localStorage.removeItem('dadosTabela');
+    //alert('LocalStorage limpo!');
+}
+
+function formularioCliente(){
+    if(cadastroCliente.style.display == "none"){
+        cadastroCliente.style.display = "block";
+        consultaCliente.style.display = "none";
+    }
+    else{
+        cadastroCliente.style.display = "none";
+    }
+}
+
+function consultarCliente(){
+    if(consultaCliente.style.display == "none"){
+        consultaCliente.style.display = "block";
+        cadastroCliente.style.display = "none";
+    }
+    else{
+        consultaCliente.style.display = "none";
+    }
+}
+
 function salvarCliente(){
     let cpf = document.getElementById("cpfTxt").value;
     let nome = document.getElementById("nomeTxt").value.trim();
     let data_nascimento = document.getElementById("dataTxt").value;
 
-    let cliente = {cpf: cpf,nome: nome,data: data_nascimento};
-    //CADASTRAR CLIENTE
-    let clientes = [];
-    clientes.push(cliente);
+    if(validarCpf(cpf) && validarNome(nome) && validarIdade(data_nascimento)){
+        cliente = criarCliente(cpf, nome, data_nascimento);
+        console.log({cliente});
+
+        salvarTabela(cliente.cpf, cliente.nome, cliente.data);
+    }
 }
 
-/*function main(){
+function main(){
     formularioCliente();
-}*/
+    consultarCliente();
+
+    salvarCliente();
+    carregarTabela();
+}
