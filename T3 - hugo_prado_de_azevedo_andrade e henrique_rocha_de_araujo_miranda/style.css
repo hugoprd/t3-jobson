@@ -1,21 +1,171 @@
 body {
     display: grid;
+<<<<<<< HEAD
     grid-template-rows: auto 1fr;
     height: 100vh;
     padding: 20px;
     box-sizing: border-box;
+=======
+    
+    background-color: rgb(167, 210, 236);
+    color: white;
+    margin: 0px;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 32px;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    /*box-sizing: border-box;*/
+}
+
+
+h1 {
+    margin: 0;
+    padding-top: 15px;
+    background-color: rgb(3, 80, 132);
+    text-align: right;
+    padding-right: 10%;
+    padding-bottom: 1%;
+}
+
+h2 {
+    color: rgb(3, 80, 132);
+    border-bottom: 1px;
+    margin-bottom: 2%;
+    padding-bottom: 4%;
+    border-bottom: solid rgb(3, 80, 132);
+
+>>>>>>> 963dd45c87321fb488e42c1b4c002e6871c111bc
 }
 
 .gridmenuLado {
     display: grid;
+<<<<<<< HEAD
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+=======
+    grid-template-columns:1fr 4fr;
+    column-gap: 0;
+    gap: 10px;
+    margin: 0;
+}
+.menu {
+    height: 100vh;
+    width: 100%;
+    margin-left: 0;
+    background-color: rgb(158, 206, 236);
+    color: rgb(3, 80, 132);
+}
+
+.menu button{
+    background-color: rgb(158, 206, 236);
+    border: 0;
+    color: rgb(3, 80, 132);
+    font-weight: bold;
+    font-size: 23px;
+}
+
+ .menu button:focus{
+    background-color: rgb(3, 80, 132);
+    color: white;            
+}
+
+
+
+.lado {
+    background-color: rgb(167, 210, 236);
+    color: rgb(0, 0, 0);
+    margin-right: 5%;
+    
+}
+
+.forms {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    font-weight: normal;
+    font-size: 26px;
+    justify-content: left;
+}
+
+.forms input {
+    width: 100%;
+}
+
+#botaoSalvar {
+    border-top: solid rgb(3, 80, 132);
+}
+
+.erros {
+    color: red;
+    font-weight: normal;
+    font-size: 20px;
+    margin-left: 15px;
+    padding-top: 5px;
+}
+
+.cabecalho {
+    background-color: rgb(3, 80, 132);
+    color: white;
+    font-weight: bold;
+}
+
+.linhaTab:hover {
+    background-color: #a2e4fa;
+}
+
+tbody:nth-child(even){
+    background-color: #cbd2e0;
+}
+
+tbody:nth-child(odd){
+    background-color: #e7eaf0;
+}
+
+td {
+    text-align: center;
+    justify-content: center;
+    height: 30px;
+}
+
+td button {
+    margin-inline: 3px;
+
+}
+
+.dadosTabela {
+    font-weight: normal;
+    font-size: 26px;
+    height: 60px;
+>>>>>>> 963dd45c87321fb488e42c1b4c002e6871c111bc
 }
 
 .incluirCliente {
     display: none;
+
+}
+
+
+.incluirCliente button {
+    max-width: 70px;
+    text-align: center;
+    justify-content: center;
+    margin-left: 30%;
 }
 
 .consultarCliente {
     display: none;
 }
+
+button {
+    padding: 3px 5px 3px 5px;
+    font-size: 1.05rem;
+    background-color: rgb(3, 80, 132);
+    color: white;
+    border: 1px solid rgb(3, 80, 132);
+    margin: 3px 0px 3px 0px;
+    cursor: pointer;
+    }
+
+hr {
+    border: 1px inset rgb(136, 196, 234);
+    }
