@@ -1,3 +1,17 @@
+body {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.gridmenuLado {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
 .incluirCliente {
     display: none;
 }
