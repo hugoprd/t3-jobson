@@ -1,22 +1,47 @@
 body {
+    display: grid;
+    
     background-color: rgb(167, 210, 236);
     color: white;
     margin: 0px;
     font-family: Arial;
     font-weight: bold;
     font-size: 32px;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    /*box-sizing: border-box;*/
 }
 
 
 h1 {
-    background-color: rgb(3, 80, 132);    
+    margin: 0;
+    padding-top: 15px;
+    background-color: rgb(3, 80, 132);
+    text-align: right;
+    padding-right: 10%;
+    padding-bottom: 1%;
 }
 
 h2 {
     color: rgb(3, 80, 132);
+    border-bottom: 1px;
+    margin-bottom: 2%;
+    padding-bottom: 4%;
+    border-bottom: solid rgb(3, 80, 132);
+
 }
 
+.gridmenuLado {
+    display: grid;
+    grid-template-columns:1fr 4fr;
+    column-gap: 0;
+    gap: 10px;
+    margin: 0;
+}
 .menu {
+    height: 100vh;
+    width: 100%;
+    margin-left: 0;
     background-color: rgb(158, 206, 236);
     color: rgb(3, 80, 132);
 }
@@ -38,7 +63,33 @@ h2 {
 
 .lado {
     background-color: rgb(167, 210, 236);
-    color: black;
+    color: rgb(0, 0, 0);
+    margin-right: 5%;
+    
+}
+
+.forms {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    font-weight: normal;
+    font-size: 26px;
+    justify-content: left;
+}
+
+.forms input {
+    width: 100%;
+}
+
+#botaoSalvar {
+    border-top: solid rgb(3, 80, 132);
+}
+
+.erros {
+    color: red;
+    font-weight: normal;
+    font-size: 20px;
+    margin-left: 15px;
+    padding-top: 5px;
 }
 
 .cabecalho {
@@ -57,10 +108,36 @@ tbody:nth-child(even){
 
 tbody:nth-child(odd){
     background-color: #e7eaf0;
-} 
+}
+
+td {
+    text-align: center;
+    justify-content: center;
+    height: 30px;
+}
+
+td button {
+    margin-inline: 3px;
+
+}
+
+.dadosTabela {
+    font-weight: normal;
+    font-size: 26px;
+    height: 60px;
+}
 
 .incluirCliente {
     display: none;
+
+}
+
+
+.incluirCliente button {
+    max-width: 70px;
+    text-align: center;
+    justify-content: center;
+    margin-left: 30%;
 }
 
 .consultarCliente {

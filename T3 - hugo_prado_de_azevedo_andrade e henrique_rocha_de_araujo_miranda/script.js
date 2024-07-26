@@ -6,11 +6,11 @@ var id = 0;
 //let cliente;
 //let dados = [];
 
-/*function mensagemErroCpf(){
+function mensagemErroCpf(){
     let erro = document.getElementById("cpfErro");
 
     erro.innerHTML = "CPF inválido!";
-}*/
+}
 
 //VERIFICACAO STRINGS DO CPF
 function apenasNumeros(string){
@@ -127,6 +127,8 @@ function validarCpf(cpfN){
                     let verificador = stringCpfN.substring(9);
         
                     if(verificarPrimeiroD(parte1, verificador) && verificarSegundoD(parte2, verificador)){
+                        let erroCpf = document.getElementById("cpfErro");
+                        erroCpf.innerHTML ='';
                         return stringCpfN;
                     }else{
                         mensagemErroCpf();
@@ -160,6 +162,8 @@ function validarCpf(cpfN){
 //VERIFICACAO NOME
 function validarNome(name){
     if(name.length >= 4 && name.length <= 80){
+        let erroNome = document.getElementById("nomeErro");
+        erroNome.innerHTML = "";
         return name;
     }
     else{
@@ -178,6 +182,8 @@ function validarIdade(data){
     let idade = Math.floor(diferenca / (1000 * 60 * 60 * 24 * 365.25));
 
     if(idade >= 18){
+        let erroData = document.getElementById("dataErro");
+        erroData.innerHTML = "";
         return data;
     }
     else if(idade < 18){
@@ -325,8 +331,6 @@ function salvarCliente(){
     let nome = document.getElementById("nomeTxt").value.trim();
     let data_nascimento = document.getElementById("dataTxt").value;
 
-    let erro = document.getElementById("cpfErro");
-    erro.innerHTML = "";
 
     if(validarCpf(cpf) && validarNome(nome) && validarIdade(data_nascimento)){
         //cliente = criarCliente(cpf, nome, data_nascimento);
@@ -345,12 +349,18 @@ function salvarCliente(){
         let data = formatarData(data_nascimento);
 
 
-        linhaTabelaCliente.innerHTML += `<tr class="linhaTab" id="linha${id}"><td>${cpfF}</td>
-        <td>${name}</td><td>${data}</td><td><button id="btlinha${id}" onclick= "excluiLinhaCliente(${id})">Excluir</button><button>Alugar</button></td></tr>`;
+        linhaTabelaCliente.innerHTML += `<tr class="linhaTab" id="linha${id}"><td class="dadosTabela">${cpfF}</td>
+        <td class="dadosTabela">${name}</td><td class="dadosTabela">${data}</td><td><button id="btlinha${id}" onclick= "excluiLinhaCliente(${id})">Excluir</button><button>Alugar</button></td></tr>`;
 
         consultarCliente();
         id++;
 
+        let erroCpf = document.getElementById("cpfErro");
+        erroCpf.innerHTML = "";
+        let erroData = document.getElementById("dataErro");
+        erroData.innerHTML = "";
+        let erroNome = document.getElementById("nomeErro");
+        erroNome.innerHTML = "";
     }
 }
 
