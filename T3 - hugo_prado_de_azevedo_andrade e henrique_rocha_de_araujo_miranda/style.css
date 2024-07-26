@@ -80,8 +80,9 @@ h2 {
     width: 100%;
 }
 
-#botaoSalvar {
-    border-top: solid rgb(3, 80, 132);
+#data{
+    border-bottom: solid rgb(3, 80, 132);
+    padding-bottom: 5px;
 }
 
 .erros {
