@@ -1,8 +1,10 @@
 var cadastroCliente = document.querySelector(".incluirCliente");
 var consultaCliente = document.querySelector(".consultarCliente");
-
-let cliente;
-let dados = [];
+var linhaTabelaCliente = document.getElementById('tabelaClientes');
+var id = 0;
+//let cpfs = [];
+//let cliente;
+//let dados = [];
 
 /*function mensagemErroCpf(){
     let erro = document.getElementById("cpfErro");
@@ -74,17 +76,43 @@ function verificarSegundoD(string, ver){
     return verN == ver[1];
 }
 
-function cpfDiferente(sCpf){
+/*function cpfDiferente(sCpf){
+    if (dados.length == 0) {
+        return true;
+        
+    }
     //console.log(sCpf);
     console.log({dados});
     dados.forEach(i =>{
         console.log(i.cpf != sCpf);
         if(i.cpf != sCpf){
-            console.log({dados});
+            console.log(i.cpf != sCpf);
             return true;
         }
     })
-}
+}*/
+
+
+/*function cpfDiferente(sCpf){
+
+    if (cpfs.length == 0) {
+        return true;
+        
+    }
+
+
+    cpfs.forEach(i =>{
+        if(i != sCpf){
+            console.log(i != sCpf);
+            return true;
+        }
+    })
+}*/
+
+
+
+
+
 
 function validarCpf(cpfN){
     let stringCpfN = cpfN.toString();
@@ -92,8 +120,8 @@ function validarCpf(cpfN){
     if(stringCpfN.length == 11){
         if(apenasNumeros(stringCpfN) == true){
             if(verificarNumeros(stringCpfN) == false){
-                if(cpfDiferente(stringCpfN)){
-                    console.log(stringCpfN);
+                /*if(cpfDiferente(stringCpfN)){
+                    console.log(stringCpfN);*/
                     let parte1 = stringCpfN.substring(0, 9);
                     let parte2 = stringCpfN.substring(0, 10);
                     let verificador = stringCpfN.substring(9);
@@ -101,39 +129,33 @@ function validarCpf(cpfN){
                     if(verificarPrimeiroD(parte1, verificador) && verificarSegundoD(parte2, verificador)){
                         return stringCpfN;
                     }else{
-                        //mensagemErroCpf();
-                        let erro = document.getElementById("cpfErro");
-
-                        erro.innerHTML = "CPF inválido!1";
+                        mensagemErroCpf();
+                        
                     }
-                }else{
-                    //mensagemErroCpf();
+                /*}else{
                     let erro = document.getElementById("cpfErro");
 
                     erro.innerHTML = "CPF inválido!2";
-                }
+                }*/
             }else{
-                //mensagemErroCpf();
+               mensagemErroCpf();
 
-                let erro = document.getElementById("cpfErro");
-
-                erro.innerHTML = "CPF inválido!3";
-                }
+               
+            }
         }else{
-            //mensagemErroCpf();
+            mensagemErroCpf();
 
-            let erro = document.getElementById("cpfErro");
-
-            erro.innerHTML = "CPF inválido!4";
+            
         }
     }else{
-        //mensagemErroCpf();
+        mensagemErroCpf();
 
-        let erro = document.getElementById("cpfErro");
-
-        erro.innerHTML = "CPF inválido!5";
+        
     }
 }
+
+
+
 
 //VERIFICACAO NOME
 function validarNome(name){
@@ -166,9 +188,9 @@ function validarIdade(data){
     }
 }
 
-function criarCliente(c, n, d){ //cpf nome data
+/*function criarCliente(c, n, d){ //cpf nome data
     return {cpf: c, nome: n, data: d};
-}
+}*/
 
 /*function salvarTabela(c, n, d){
     let tabela = document.getElementById("tabela");
@@ -208,14 +230,14 @@ function criarCliente(c, n, d){ //cpf nome data
     }
 }*/
 
-function limparLocalStorage(){
+/*function limparLocalStorage(){
     localStorage.removeItem('dadosTabela');
     //alert('LocalStorage limpo!');
-}
+}*/
 
 function formularioCliente(){
     if(cadastroCliente.style.display == "none"){
-        cadastroCliente.style.display = "block";
+        cadastroCliente.style.display = "grid";
         consultaCliente.style.display = "none";
     }
     else{
@@ -225,12 +247,77 @@ function formularioCliente(){
 
 function consultarCliente(){
     if(consultaCliente.style.display == "none"){
-        consultaCliente.style.display = "block";
+        consultaCliente.style.display = "grid";
         cadastroCliente.style.display = "none";
     }
     else{
         consultaCliente.style.display = "none";
     }
+}
+
+function excluiLinhaCliente(id){
+    let linha = document.getElementById('linha' + id);
+    linha.innerHTML = '';
+    id--;
+}
+
+function formataNome(name){
+      // divide o nome em palavras pelo espaço
+      let palavras = name.split(" ");
+
+      // primeira letra de cada palavra maiuscula
+      let palavrasM = palavras.map(i => {
+          // sem palavra vazia
+          if (i.length > 0) {
+              // bota só a primeira letra maiuscula
+              return i.charAt(0).toUpperCase() + i.slice(1).toLowerCase();
+          } else {
+              return i;
+          }
+      });
+  
+      // junta tudo
+      return palavrasM.join(" ");
+    
+}
+
+function formataCpf(cpf){
+    //transforma pra string
+    let sCpf = cpf.toString();
+    let partes = [];
+    let partes2 = [];
+    let junta;
+//separa e coloca - na primeira parte 
+    partes.push(sCpf.substring(0, 3));
+    partes.push(sCpf.substring(3, 6));
+    partes.push(sCpf.substring(6, 9));
+
+    junta = partes.join("-");
+//coloca . na ultima parte
+    partes2.push(junta);
+    partes2.push(sCpf.substring(9));
+
+    junta = partes2.join(".");
+//junta as duas partes
+    return junta;
+}
+
+function formatarData(date) {
+    let data = date.toString();
+    console.log(data);
+    let parte1 = [];
+    let junta;
+    let aux = [];
+
+    parte1 = data.split('-');
+    aux = data.split('-');
+
+    parte1[0] = aux[2];
+    parte1[2] = aux[0];
+
+    junta = parte1.join('/');
+
+    return junta;
 }
 
 function salvarCliente(){
@@ -242,21 +329,36 @@ function salvarCliente(){
     erro.innerHTML = "";
 
     if(validarCpf(cpf) && validarNome(nome) && validarIdade(data_nascimento)){
-        cliente = criarCliente(cpf, nome, data_nascimento);
-        console.log({cliente});
+        //cliente = criarCliente(cpf, nome, data_nascimento);
+        //console.log({cliente});
 
         //salvarTabela(cliente.cpf, cliente.nome, cliente.data);
-        dados.push(cliente);
-        localStorage.setItem('dadosTabela', JSON.stringify(dados));
-        console.log({dados});
+        //dados.push(cliente);
+        //localStorage.setItem('dadosTabela', JSON.stringify(dados));
+        //console.log({dados});
+
+        //cpfs.push(cpf);
+        //console.log({cpfs});
+
+        let name = formataNome(nome);
+        let cpfF = formataCpf(cpf);
+        let data = formatarData(data_nascimento);
+
+
+        linhaTabelaCliente.innerHTML += `<tr class="linhaTab" id="linha${id}"><td>${cpfF}</td>
+        <td>${name}</td><td>${data}</td><td><button id="btlinha${id}" onclick= "excluiLinhaCliente(${id})">Excluir</button><button>Alugar</button></td></tr>`;
+
+        consultarCliente();
+        id++;
+
     }
 }
 
 function main(){
-    let dadosSalvos = localStorage.getItem('dadosTabela');
+    //let dadosSalvos = localStorage.getItem('dadosTabela');
 
-    if(dadosSalvos){
+    /*if(dadosSalvos){
         dados = JSON.parse(dadosSalvos);
         console.log({dados});
-    }
+    }*/
 }

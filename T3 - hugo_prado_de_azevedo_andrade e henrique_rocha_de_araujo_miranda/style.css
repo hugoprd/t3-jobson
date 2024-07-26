@@ -1,3 +1,64 @@
+body {
+    background-color: rgb(167, 210, 236);
+    color: white;
+    margin: 0px;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 32px;
+}
+
+
+h1 {
+    background-color: rgb(3, 80, 132);    
+}
+
+h2 {
+    color: rgb(3, 80, 132);
+}
+
+.menu {
+    background-color: rgb(158, 206, 236);
+    color: rgb(3, 80, 132);
+}
+
+.menu button{
+    background-color: rgb(158, 206, 236);
+    border: 0;
+    color: rgb(3, 80, 132);
+    font-weight: bold;
+    font-size: 23px;
+}
+
+ .menu button:focus{
+    background-color: rgb(3, 80, 132);
+    color: white;            
+}
+
+
+
+.lado {
+    background-color: rgb(167, 210, 236);
+    color: black;
+}
+
+.cabecalho {
+    background-color: rgb(3, 80, 132);
+    color: white;
+    font-weight: bold;
+}
+
+.linhaTab:hover {
+    background-color: #a2e4fa;
+}
+
+tbody:nth-child(even){
+    background-color: #cbd2e0;
+}
+
+tbody:nth-child(odd){
+    background-color: #e7eaf0;
+} 
+
 .incluirCliente {
     display: none;
 }
@@ -5,3 +66,17 @@
 .consultarCliente {
     display: none;
 }
+
+button {
+    padding: 3px 5px 3px 5px;
+    font-size: 1.05rem;
+    background-color: rgb(3, 80, 132);
+    color: white;
+    border: 1px solid rgb(3, 80, 132);
+    margin: 3px 0px 3px 0px;
+    cursor: pointer;
+    }
+
+hr {
+    border: 1px inset rgb(136, 196, 234);
+    }
