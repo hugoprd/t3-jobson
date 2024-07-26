@@ -2,6 +2,13 @@ var cadastroCliente = document.querySelector(".incluirCliente");
 var consultaCliente = document.querySelector(".consultarCliente");
 
 let cliente;
+let dados = [];
+
+/*function mensagemErroCpf(){
+    let erro = document.getElementById("cpfErro");
+
+    erro.innerHTML = "CPF inválido!";
+}*/
 
 //VERIFICACAO STRINGS DO CPF
 function apenasNumeros(string){
@@ -67,26 +74,64 @@ function verificarSegundoD(string, ver){
     return verN == ver[1];
 }
 
+function cpfDiferente(sCpf){
+    //console.log(sCpf);
+    console.log({dados});
+    dados.forEach(i =>{
+        console.log(i.cpf != sCpf);
+        if(i.cpf != sCpf){
+            console.log({dados});
+            return true;
+        }
+    })
+}
+
 function validarCpf(cpfN){
     let stringCpfN = cpfN.toString();
 
     if(stringCpfN.length == 11){
         if(apenasNumeros(stringCpfN) == true){
             if(verificarNumeros(stringCpfN) == false){
-                let parte1 = stringCpfN.substring(0, 9);
-                let parte2 = stringCpfN.substring(0, 10);
-                let verificador = stringCpfN.substring(9);
+                if(cpfDiferente(stringCpfN)){
+                    console.log(stringCpfN);
+                    let parte1 = stringCpfN.substring(0, 9);
+                    let parte2 = stringCpfN.substring(0, 10);
+                    let verificador = stringCpfN.substring(9);
+        
+                    if(verificarPrimeiroD(parte1, verificador) && verificarSegundoD(parte2, verificador)){
+                        return stringCpfN;
+                    }else{
+                        //mensagemErroCpf();
+                        let erro = document.getElementById("cpfErro");
 
-                if(verificarPrimeiroD(parte1, verificador) && verificarSegundoD(parte2, verificador)){
-                    return cpfN;
+                        erro.innerHTML = "CPF inválido!1";
+                    }
+                }else{
+                    //mensagemErroCpf();
+                    let erro = document.getElementById("cpfErro");
+
+                    erro.innerHTML = "CPF inválido!2";
                 }
-            }
+            }else{
+                //mensagemErroCpf();
+
+                let erro = document.getElementById("cpfErro");
+
+                erro.innerHTML = "CPF inválido!3";
+                }
+        }else{
+            //mensagemErroCpf();
+
+            let erro = document.getElementById("cpfErro");
+
+            erro.innerHTML = "CPF inválido!4";
         }
-    }
-    else{
+    }else{
+        //mensagemErroCpf();
+
         let erro = document.getElementById("cpfErro");
 
-        erro.innerHTML = "CPF inválido!";
+        erro.innerHTML = "CPF inválido!5";
     }
 }
 
@@ -125,16 +170,15 @@ function criarCliente(c, n, d){ //cpf nome data
     return {cpf: c, nome: n, data: d};
 }
 
-function salvarTabela(c, n, d){
+/*function salvarTabela(c, n, d){
     let tabela = document.getElementById("tabela");
-    let dados = [];
 
     // Percorre as linhas da tabela (exceto a primeira que é o cabeçalho)
     for (let i = 1; i < tabela.rows.length; i++){
         let linha = tabela.rows[i];
-        let c = linha.cells[0].textContent;
-        let n = linha.cells[1].textContent;
-        let d = linha.cells[2].textContent;
+        c = linha.cells[0].textContent;
+        n = linha.cells[1].textContent;
+        d = linha.cells[2].textContent;
         dados.push({c, n, d});
     }
 
@@ -142,7 +186,7 @@ function salvarTabela(c, n, d){
     //alert('Tabela salva no localStorage!');
 }
 
-function carregarTabela(){
+/*function carregarTabela(){
     let dadosSalvos = localStorage.getItem('dadosTabela');
 
     if(dadosSalvos){
@@ -162,7 +206,7 @@ function carregarTabela(){
             novaLinha.insertCell().textContent = dado.d;
         });
     }
-}
+}*/
 
 function limparLocalStorage(){
     localStorage.removeItem('dadosTabela');
@@ -194,18 +238,25 @@ function salvarCliente(){
     let nome = document.getElementById("nomeTxt").value.trim();
     let data_nascimento = document.getElementById("dataTxt").value;
 
+    let erro = document.getElementById("cpfErro");
+    erro.innerHTML = "";
+
     if(validarCpf(cpf) && validarNome(nome) && validarIdade(data_nascimento)){
         cliente = criarCliente(cpf, nome, data_nascimento);
         console.log({cliente});
 
-        salvarTabela(cliente.cpf, cliente.nome, cliente.data);
+        //salvarTabela(cliente.cpf, cliente.nome, cliente.data);
+        dados.push(cliente);
+        localStorage.setItem('dadosTabela', JSON.stringify(dados));
+        console.log({dados});
     }
 }
 
 function main(){
-    formularioCliente();
-    consultarCliente();
+    let dadosSalvos = localStorage.getItem('dadosTabela');
 
-    salvarCliente();
-    carregarTabela();
+    if(dadosSalvos){
+        dados = JSON.parse(dadosSalvos);
+        console.log({dados});
+    }
 }
