@@ -1,11 +1,5 @@
 body {
     display: grid;
-<<<<<<< HEAD
-    grid-template-rows: auto 1fr;
-    height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-=======
     
     background-color: rgb(167, 210, 236);
     color: white;
@@ -35,15 +29,10 @@ h2 {
     padding-bottom: 4%;
     border-bottom: solid rgb(3, 80, 132);
 
->>>>>>> 963dd45c87321fb488e42c1b4c002e6871c111bc
 }
 
 .gridmenuLado {
     display: grid;
-<<<<<<< HEAD
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-=======
     grid-template-columns:1fr 4fr;
     column-gap: 0;
     gap: 10px;
@@ -91,8 +80,9 @@ h2 {
     width: 100%;
 }
 
-#botaoSalvar {
-    border-top: solid rgb(3, 80, 132);
+#data{
+    border-bottom: solid rgb(3, 80, 132);
+    padding-bottom: 5px;
 }
 
 .erros {
@@ -136,7 +126,6 @@ td button {
     font-weight: normal;
     font-size: 26px;
     height: 60px;
->>>>>>> 963dd45c87321fb488e42c1b4c002e6871c111bc
 }
 
 .incluirCliente {
