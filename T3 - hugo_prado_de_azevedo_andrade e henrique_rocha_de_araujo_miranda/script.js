@@ -7,16 +7,30 @@ let cliente;
 let dados = [];
 
 function limparTexto(){
-    let textoInput = document.querySelector(".erros").value;
-    let textoLimpo = textoInput.replace(/[^a-zA-Z0-9 ]/g, ''); //remove caracteres
+    let inputElement = document.querySelector('.erros');
 
-    document.querySelector('.erros').textContent = textoLimpo;
-    document.querySelector('.erros').setAttribute('placeholder', limparTexto);
+    if(inputElement){
+        let textoInput = inputElement.value;
+        let textoLimpo = textoInput.replace(/[^a-zA-Z0-9 ]/g, '');
+
+        inputElement.setAttribute('placeholder', textoLimpo);
+    }
 }
 
-function mensagemErro(aux, msg){
+function mensagemErro(aux, msg){ // aux = id do erro ; msg = mensagem escrita
     let erro = aux;
-    let mensage = msg;
+    let mensagem = msg;
+
+    if(erro = "cpfErro"){
+        let erroA = document.getElementById("cpfErro");
+
+        erroA.innerHTML = mensagem;
+    }
+    else if(erro = "nomeErro"){
+        let erroA = document.getElementById("nomeErro");
+
+        erroA.innerHTML = mensagem;
+    }
 }
 
 //VERIFICACAO STRINGS DO CPF
@@ -54,7 +68,6 @@ function verificarPrimeiroD(string, ver){
     else if(resto >= 2 && resto <= 10){
         verN = 11 - resto;
     }
-    //console.log(verN == ver[0]);
 
     return verN == ver[0];
 }
@@ -78,21 +91,18 @@ function verificarSegundoD(string, ver){
     else if(resto >= 2 && resto <= 10){
         verN = 11 - resto;
     }
-    //console.log(verN == ver[1]);
 
     return verN == ver[1];
 }
 
 function cpfIgual(sCpf){
-    if (dados.length === 0) {
+    if (dados.length === 0){
         return false;
-        
     }
-    //console.log(sCpf);
+
     console.log({dados});
     for(let i = 0; i < dados.length; i++){
         if(dados[i].cpf === sCpf){
-            console.log(dados[i].cpf === sCpf);
             return true;
         }
     }
@@ -114,23 +124,21 @@ function validarCpf(cpfN){
                     let verificador = stringCpfN.substring(9);
         
                     if(verificarPrimeiroD(parte1, verificador) && verificarSegundoD(parte2, verificador)){
-                        let erroCpf = document.getElementById("cpfErro");
-                        erroCpf.innerHTML ='';
                         return stringCpfN;
                     }else{
-                        mensagemErro("cpf", "CPF inválido!");
+                        mensagemErro("cpfErro", "CPF inválido!");
                     }
                 }else{
-                    mensagemErro("cpf", "CPF inválido!");
+                    mensagemErro("cpfErro", "CPF inválido!");
                 }
             }else{
-               mensagemErro("cpf", "CPF inválido!");
+               mensagemErro("cpfErro", "CPF inválido!");
             }
         }else{
-            mensagemErro("cpf", "CPF inválido!");
+            mensagemErro("cpfErro", "CPF inválido!");
         }
     }else{
-        mensagemErro("cpf", "CPF inválido!");
+        mensagemErro("cpfErro", "CPF inválido!");
     }
 }
 
@@ -140,14 +148,10 @@ function validarCpf(cpfN){
 //VERIFICACAO NOME
 function validarNome(name){
     if(name.length >= 4 && name.length <= 80){
-        let erroNome = document.getElementById("nomeErro");
-        erroNome.innerHTML = "";
         return name;
     }
     else{
-        let erro = document.getElementById("nomeErro");
-
-        erro.innerHTML = "Nome deve ter de 4 a 80 caractéres!";
+        mensagemErro("nomeErro", "Nome deve ter de 4 a 80 caractéres!");
     }
 }
 
@@ -160,8 +164,6 @@ function validarIdade(data){
     let idade = Math.floor(diferenca / (1000 * 60 * 60 * 24 * 365.25));
 
     if(idade >= 18){
-        let erroData = document.getElementById("dataErro");
-        erroData.innerHTML = "";
         return data;
     }
     else if(idade < 18){
