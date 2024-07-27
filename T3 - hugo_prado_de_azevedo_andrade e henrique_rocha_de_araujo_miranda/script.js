@@ -5,7 +5,7 @@ var linhaTabelaCliente = document.getElementById('tabelaClientes');
 
 let cliente;
 let dados = [];
-let id = 0;
+let id;
 
 //LIMPAR OS TEXTOS DOS INPUTS DOS CLIENTES
 function limparTexto() {
@@ -183,22 +183,6 @@ function criarCliente(c, n, d, i){ //cpf nome data id
     return {cpf: c, nome: n, data: d, id: i};
 }
 
-function salvarTabela(c, n, d){
-    let tabela = document.getElementById("tabela");
-
-    //percorre as linhas da tabela (exceto a primeira que é o cabeçalho)
-    for (let i = 1; i < tabela.rows.length; i++){
-        let linha = tabela.rows[i];
-        c = linha.cells[0].textContent;
-        n = linha.cells[1].textContent;
-        d = linha.cells[2].textContent;
-        dados.push({c, n, d});
-    }
-
-    localStorage.setItem('dadosTabela', JSON.stringify(dados));
-    //alert('Tabela salva no localStorage!');
-}
-
 function formularioCliente(){
     if(cadastroCliente.style.display == "none"){
         cadastroCliente.style.display = "grid";
@@ -219,12 +203,31 @@ function consultarCliente(){
     }
 }
 
-function excluiLinhaCliente(id){
+function atualizarTabelaClientes(){
+    carregarClientes();
+}
+
+function excluirLinhaCliente(i){
     let confirmacao = window.confirm("Deseja realmente excluir este item?");
     if(confirmacao){
-        let linha = document.getElementById('linha' + id);
-        linha.innerHTML = '';
-        id--;
+        let dados = JSON.parse(localStorage.getItem('dadosTabela')) || [];
+        for (let i = 0; i < dados.length; i++) {
+            if (dados[i].cpf === cpf) {
+                //remove o cliente do array
+                dados.splice(i, 1);
+
+                //salva o array atualizado de volta no localStorage
+                localStorage.setItem('dadosTabela', JSON.stringify(dados));
+
+                let linhaTabela = document.getElementById(`linha${i}`);
+                linhaTabela.innerHTML = "";
+                
+                break; //interrompe o loop após encontrar e remover o cliente
+            }
+        }
+
+        //atualiza a tabela na interface
+        atualizarTabelaClientes();
     }
 }
 
@@ -287,10 +290,11 @@ function formataData(date) {
     return junta;
 }
 
+//CARREGAR CLIENTE 
 function carregarClientes(){
     let dados = JSON.parse(localStorage.getItem('dadosTabela')) || [];
     let tabelaClientes = document.getElementById('tabelaClientes');
-    tabelaClientes.innerHTML = '';
+    //tabelaClientes.innerHTML = '';
 
     dados.forEach(function(cliente, i){
         let cpfFormatado = formataCpf(cliente.cpf);
@@ -303,7 +307,7 @@ function carregarClientes(){
                 <td class="dadosTabela">${nomeFormatado}</td>
                 <td class="dadosTabela">${dataFormatada}</td>
                 <td>
-                    <button onclick="excluirLinhaCliente(${cliente.id})">Excluir</button>
+                    <button id="btlinha${cliente.id}"onclick="excluirLinhaCliente(${cliente.id})">Excluir</button>
                     <button>Alugar</button>
                 </td>
             </tr>`;
@@ -369,7 +373,7 @@ function salvarCliente(){
                 <td class="dadosTabela">${name}</td>
                 <td class="dadosTabela">${data}</td>
                 <td>
-                    <button id="btlinha${id}" onclick= "excluiLinhaCliente(${id})">Excluir</button>
+                    <button id="btlinha${id}" onclick= "excluirLinhaCliente(${id})">Excluir</button>
                     <button>Alugar</button>
                 </td>
             </tr>`;
@@ -380,13 +384,6 @@ function salvarCliente(){
 }
 
 function main(){
-    tabelaClientes.innerHTML += `<tr class="cabecalho">
-                                        <th><button>CPF</button></th>
-                                        <th><button>Nome</button></th>
-                                        <th>Data de Nascimento</th>
-                                        <th>Ações</th>
-                                    </tr>`;
-
     let dadosSalvos = localStorage.getItem('dadosTabela');
 
     if(dadosSalvos){
