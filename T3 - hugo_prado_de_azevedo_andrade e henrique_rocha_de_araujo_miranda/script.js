@@ -2,6 +2,10 @@
 var cadastroCliente = document.querySelector(".incluirCliente");
 var consultaCliente = document.querySelector(".consultarCliente");
 var linhaTabelaCliente = document.getElementById('tabelaClientes');
+let cadastroVeiculo = document.querySelector('.incluirVeiculo');
+let consultaVeiculo = document.querySelector('.consultarVeiculo');
+
+
 
 let cliente;
 let dados = [];
@@ -184,9 +188,12 @@ function criarCliente(c, n, d, i){ //cpf nome data id
 }
 
 function formularioCliente(){
+    let caixaCpf = document.getElementById('cpfTxt');
+
     if(cadastroCliente.style.display == "none"){
         cadastroCliente.style.display = "grid";
         consultaCliente.style.display = "none";
+        caixaCpf.focus();
     }
     else{
         cadastroCliente.style.display = "none";
@@ -200,6 +207,19 @@ function consultarCliente(){
     }
     else{
         consultaCliente.style.display = "none";
+    }
+}
+
+function formularioVeiculo(){
+    let caixaPlaca = document.getElementById('placaTxt');
+    
+    if(cadastroVeiculo.style.display == "none"){
+        cadastroVeiculo.style.display = "grid";
+        consultaVeiculo.style.display = "none";
+        caixaPlaca.focus();
+    }
+    else{
+        cadastroVeiculo.style.display = "none";
     }
 }
 

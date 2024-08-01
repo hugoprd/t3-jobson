@@ -9,7 +9,6 @@ body {
     font-size: 32px;
     grid-template-rows: auto 1fr;
     height: 100vh;
-    /*box-sizing: border-box;*/
 }
 
 
@@ -65,7 +64,6 @@ h2 {
     background-color: rgb(167, 210, 236);
     color: rgb(0, 0, 0);
     margin-right: 5%;
-    
 }
 
 .forms {
@@ -142,6 +140,14 @@ td button {
 }
 
 .consultarCliente {
+    display: none;
+}
+
+.incluirVeiculo{
+    display: none;
+}
+
+.consultarVeiculo{
     display: none;
 }
 

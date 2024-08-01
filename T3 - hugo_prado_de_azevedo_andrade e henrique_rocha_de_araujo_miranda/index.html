@@ -10,11 +10,11 @@
                 <div class="menu">
                     <dl>
                         <dt>Clientes</dt>
-                            <dd><button id="incluirCliente" onclick="formularioCliente()">Incluir</button></dd>
-                            <dd><button id="consultarCliente" onclick="consultarCliente()">Consultar</button></dd>
+                            <dd><button onclick="formularioCliente()">Incluir</button></dd>
+                            <dd><button onclick="consultarCliente()">Consultar</button></dd>
                         <dt>Veículos</dt>
-                            <dd><button>Incluir</button></dd>
-                            <dd><button>Consultar</button></dd>
+                            <dd><button onclick="formularioVeiculo()">Incluir</button></dd>
+                            <dd><button onclick="consultarVeiculo()">Consultar</button></dd>
                         <dt>Locação</dt>
                             <dd><button>Consultar</button></dd>
                     </dl>
@@ -34,7 +34,7 @@
                             <label>Data de nascimento:</label>
                             <form><input type=date id="dataTxt"></form><div class="erros" id="dataErro"></div>
                         </div>
-                        <div id="botaoSalvar">
+                        <div class="botaoSalvar">
                             <button onclick="salvarCliente()">Salvar</button>
                         </div>
                     </div>
@@ -46,6 +46,45 @@
                                     <th><button>CPF</button></th>
                                     <th><button>Nome</button></th>
                                     <th>Data de Nascimento</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="incluirVeiculo">
+                        <h2>Cadastro de Veículos</h2>
+                        <form>
+                            <label>Placa:</label>
+                            <input type="text" id="placaTxt"><div class="erros" id="placaErro"></div>
+                            <form>
+                                <label>Tipo:</label>
+                                <input type="radio" name="carroOuMoto" value="carro">Carro
+                                <input type="radio" name="carroOuMoto" value="moto">Moto
+                            </form><div class="erros" id="tipoErro"></div>
+                            <label>Modelo:</label>
+                            <input type="text" id="modeloTxt"><div class="erros" id="modeloErro"></div>
+                            <label>Ano:</label>
+                            <input type="text" id="anoTxt"><div class="erros" id="anoErro"></div>
+                            <label>Valor da diária:</label>
+                            <input type="number" id="valorDTxt"><div class="erros" id="valorDErro"></div>
+                            <label>Quilometragem:</label>
+                            <input type="text">
+                        </form>
+                        <div class="botaoSalvar">
+                            <button onclick="salvarVeiculo()">Salvar</button>
+                        </div>
+                    </div>
+                    <div class="consultarVeiculo">
+                        <h2>Lista de Veículos</h2>
+                        <table id="tabelaVeiculos">
+                            <tbody>
+                                <tr class="cabecalho">
+                                    <th><button>Placa</button></th>
+                                    <th><button>Tipo</button></th>
+                                    <th>Modelo</th>
+                                    <th>Ano</th>
+                                    <th>Diária</th>
+                                    <th>Km</th>
                                     <th>Ações</th>
                                 </tr>
                             </tbody>
