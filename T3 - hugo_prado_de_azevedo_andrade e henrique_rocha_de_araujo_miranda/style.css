@@ -110,6 +110,8 @@ tbody:nth-child(odd){
 }
 
 td {
+    font-weight: normal;
+    font-size: 24px;
     text-align: center;
     justify-content: center;
     height: 30px;
@@ -121,6 +123,11 @@ td button {
 }
 
 .dadosTabela {
+    font-weight: normal;
+    font-size: 26px;
+    height: 60px;
+}
+.dadosTabelaV {
     font-weight: normal;
     font-size: 26px;
     height: 60px;
@@ -164,3 +171,13 @@ button {
 hr {
     border: 1px inset rgb(136, 196, 234);
     }
+
+#text {
+    display: none;
+}
+
+.disabled {
+    color: black;
+    background-color: gray;
+    cursor: default;
+}

@@ -37,15 +37,19 @@ function limparTextoC(){
 function limparTextoV(){
     //seleciona os elementos
     let inputElementPlaca = document.getElementById("placaTxt");
-    //let inputElementTipo = document.getElementById("tipoTxt");
+    let inputElementTipo = document.querySelectorAll('input[name="carroOuMoto"]');
+    //let inputElementTipo1 = document.getElementById("tipoR1");
+    //let inputElementTipo2 = document.getElementById("tipoR2");
     let inputElementModelo = document.getElementById("modeloTxt");
     let inputElementAno = document.getElementById("anoTxt");
-    let inputElementValor = document.getElementById("valorTxt");
+    let inputElementValor = document.getElementById("valorDTxt");
     let inputElementKm = document.getElementById("kmTxt");
 
     //limpa os valores dos campos de entrada
     inputElementPlaca.value = "";
-    //inputElementTipo.value = "";
+    inputElementTipo.forEach(function(tipo){
+        tipo.checked = false;
+    });
     inputElementModelo.value = "";
     inputElementAno.value = "";
     inputElementValor.value = "";
@@ -54,13 +58,13 @@ function limparTextoV(){
     //limpa as mensagens de erro, se houver
     let erroPlaca = document.getElementById("placaErro");
     erroPlaca.innerHTML = "";
-    /*let erroTipo = document.getElementById("tipoErro");
-    erroTipo.innerHTML = "";*/
+    let erroTipo = document.getElementById("tipoErro");
+    erroTipo.innerHTML = "";
     let erroModelo = document.getElementById("modeloErro");
     erroModelo.innerHTML = "";
     let erroAno = document.getElementById("anoErro");
     erroAno.innerHTML = "";
-    let erroValor = document.getElementById("valorErro");
+    let erroValor = document.getElementById("valorDErro");
     erroValor.innerHTML = "";
     let erroKm = document.getElementById("kmErro");
     erroKm.innerHTML = "";
@@ -237,11 +241,43 @@ function validarIdade(data){
     let cpfB = dados.cpf.replace(/\D/g, '');
 
     array.sort(cpfA.localeCompare(cpfB, 'pt-BR', {numeric: true}));
-}
+}*/
 
 function ordenarNome(){
-    
-}*/
+    let tabela = document.querySelector(".linhaTab");
+    tabela.innerHTML = "";
+
+    dados.sort((a,b) =>{
+        console.log(a);
+        console.log(b);
+        if(a.nome > b.nome){
+            return 1;
+        }
+        if(a.nome < b.nome){
+            return -1;
+        }
+        return 0;
+    });
+
+    for(let i of dados){
+        let name = formataNome(i.nome);
+        let cpf = formataCpf(i.cpf);
+        let data = formataData(i.data);
+
+        let linhaNova = `
+            <tr class="linhaTab" id="${i.cpf}">
+                <td class="dadosTabela">${cpf}</td>
+                <td class="dadosTabela">${name}</td>
+                <td class="dadosTabela">${data}</td>
+                <td>
+                    <button id="btlinha" onclick="excluirLinhaCliente(${i.cpf})">Excluir</button>
+                    <button id="btAlugar" onclick="alugarVeiculo()">Alugar</button>
+                </td>
+            </tr>`;
+
+            tabela += linhaNova;
+    }
+}
 
 //MOSTRAR E ESCONDER OS TOPICOS
 function formularioCliente(){
@@ -276,6 +312,13 @@ function consultarCliente(){
 
 function formularioVeiculo(){
     let caixaPlaca = document.getElementById('placaTxt');
+
+    let placaValor = document.getElementById("placaTxt");
+    let modeloValor = document.getElementById("modeloTxt");
+    let tipoValor1 = document.getElementById("tipoR1");
+    let tipoValor2 = document.getElementById("tipoR2");
+    let anoValor = document.getElementById("anoTxt");
+    let kmValor = document.getElementById("kmTxt");
     
     if(cadastroVeiculo.style.display == "none"){
         cadastroVeiculo.style.display = "grid";
@@ -285,6 +328,46 @@ function formularioVeiculo(){
         consultaCliente.style.display = "none";
         
         caixaPlaca.focus();
+
+        placaValor.disabled = false;
+        modeloValor.disabled = false;
+        tipoValor1.disabled = false;
+        tipoValor2.disabled = false;
+        anoValor.disabled = false;
+        kmValor.disabled = false;
+
+        caixaPlaca.focus();
+    }
+    else{
+        cadastroVeiculo.style.display = "none";
+    }
+}
+
+function edicaoVeiculo(){
+    let caixaValor = document.getElementById('valorDTxt');
+
+    let placaValor = document.getElementById("placaTxt");
+    let modeloValor = document.getElementById("modeloTxt");
+    let tipoValor1 = document.getElementById("tipoR1");
+    let tipoValor2 = document.getElementById("tipoR2");
+    let anoValor = document.getElementById("anoTxt");
+    let kmValor = document.getElementById("kmTxt");
+    
+    if(cadastroVeiculo.style.display == "none"){
+        cadastroVeiculo.style.display = "grid";
+        consultaVeiculo.style.display = "none";
+        
+        cadastroCliente.style.display = "none";
+        consultaCliente.style.display = "none";
+        
+        caixaValor.focus();
+
+        placaValor.disabled = true;
+        modeloValor.disabled = true;
+        tipoValor1.disabled = true;
+        tipoValor2.disabled = true;
+        anoValor.disabled = true;
+        kmValor.disabled = true;
     }
     else{
         cadastroVeiculo.style.display = "none";
@@ -292,6 +375,8 @@ function formularioVeiculo(){
 }
 
 function consultarVeiculo(){    
+    limparTextoV();
+
     if(consultaVeiculo.style.display == "none"){
         consultaVeiculo.style.display = "grid";
         cadastroVeiculo.style.display = "none";
@@ -311,11 +396,14 @@ function atualizarTabelaClientes(){
 
 function excluirLinhaCliente(c){
     let confirmacao = window.confirm("Deseja realmente excluir este item?");
-    let linhaTabela = document.getElementById(`linha${c}`);
+    let linhaTabela = document.getElementById(`${c}`);
+    console.log(linhaTabela);
+    console.log(c);
     
     if(confirmacao){
         let dados = JSON.parse(localStorage.getItem('dadosTabela')) || [];
         linhaTabela.remove();
+
         for(let i = 0; i < dados.length; i++){
             console.log(dados[i].cpf.toString() === c.toString());
             if (dados[i].cpf.toString() === c.toString()){
@@ -356,6 +444,7 @@ function formataCpf(cpf){
     partes2.push(sCpf.substring(9));
 
     junta = partes2.join("-");
+    junta = junta.toString();
 
     return junta;
 }
@@ -401,19 +490,25 @@ function carregarClientes(){
     let tabelaClientes = document.getElementById('tabelaClientes');
     //tabelaClientes.innerHTML = '';
 
+    if(dadosVeiculos === 0){
+        let botaoAlugar = document.getElementById("btAlugar");
+        botaoAlugar.setAttribute("disabled", "");
+    }
+
     dados.forEach(function(cliente, i){
         let cpfFormatado = formataCpf(cliente.cpf);
+        console.log(cliente.cpf);
         let nomeFormatado = formataNome(cliente.nome);
         let dataFormatada = formataData(cliente.data);
 
         tabelaClientes.innerHTML += `
-            <tr class="linhaTab" id="linha${cliente.cpf}>
+            <tr class="linhaTab" id="${cliente.cpf}">
                 <td class="dadosTabela">${cpfFormatado}</td>
                 <td class="dadosTabela">${nomeFormatado}</td>
                 <td class="dadosTabela">${dataFormatada}</td>
                 <td>
                     <button id="btlinha"onclick="excluirLinhaCliente(${cliente.cpf})">Excluir</button>
-                    <button>Alugar</button>
+                    <button id="btAlugar" onclick="alugarVeiculo()">Alugar</button>
                 </td>
             </tr>`;
     });
@@ -475,15 +570,14 @@ function salvarCliente(){
         let cpfF = formataCpf(cpf);
         let data = formataData(data_nascimento);
 
-
         linhaTabelaCliente.innerHTML += `
-            <tr class="linhaTab" id="linha${cpf}">
+            <tr class="linhaTab" id="${cpf}">
                 <td class="dadosTabela">${cpfF}</td>
                 <td class="dadosTabela">${name}</td>
                 <td class="dadosTabela">${data}</td>
                 <td>
                     <button id="btlinha" onclick="excluirLinhaCliente(${cpf})">Excluir</button>
-                    <button onclick="alugarVeiculo()">Alugar</button>
+                    <button id="btExcluirV" onclick="alugarVeiculo()">Alugar</button>
                 </td>
             </tr>`;
 
@@ -499,14 +593,16 @@ function formatarPlaca(p) {
     let placa2 = placa.substring(3, 7);
     let junta;
 
+    placa1 = placa1.toUpperCase();
     junta = placa1 + "-" + placa2;
 
     return junta;
 }
 
-/*function formatarTipo(t){
-    return t.charAt(0).toUpperCase() + str.slice(1);
-}*/
+function formatarTipo(t){
+    let tipo = t.toString();
+    return tipo.charAt(0).toUpperCase() + tipo.slice(1);
+}
 
 function formatarModelo(m){
     return m.charAt(0).toUpperCase() + m.slice(1);
@@ -578,6 +674,21 @@ function validarPlaca(p){
     }
 }
 
+function validarTipo(t){
+    let tipo = t;
+    var nenhumSelect = true;
+    //console.log(tipo);
+
+    for(let i = 0; i < tipo.length; i++){
+        if(tipo[i].checked){
+            let ti = tipo[i];
+            let tiS = ti.value.toString();
+
+            return tiS;
+        }
+    }
+}
+
 function validarModelo(m){
     let modelo = m.toString();
 
@@ -639,18 +750,49 @@ function validarKm(k){
     }
 }
 
+//EDITAR VEICULOS
+function editarVeiculo(placa){
+    let dados = JSON.parse(localStorage.getItem('dadosTabelaV')) || [];
+
+    edicaoVeiculo();
+
+    let texto = document.getElementById("valorDTxt");
+    console.log(texto);
+    console.log(dados);
+    /*if(){
+        for(let i = 0; i < dados.length; i++){
+            console.log(texto);
+            console.log(dados[i]);
+            if(dados[i].placa === placa){
+                console.log(texto);
+                dados[i].valor = texto;
+            }
+        }
+    }    */
+}
+
 //EXCLUIR VEICULOS
-function excluirLinhaVeiculo(p){
+function excluirLinhaVeiculo(placa){
     let confirmacao = window.confirm("Deseja realmente excluir este item?");
-    let linhaTabela = document.getElementById(`linha${p}`);
+    let par = placa.value;
+    console.log(par);
+    console.log(placa);
+    let linhaTabela = document.getElementById(`${placa}`);
+    console.log(placa);
+    console.log(linhaTabela);
     
     if(confirmacao){
         let dados = JSON.parse(localStorage.getItem('dadosTabelaV')) || [];
         linhaTabela.remove();
+        console.log(placa);
+        console.log(linhaTabela);
+
         for(let i = 0; i < dados.length; i++){
             console.log(dados[i].placa.toString() === p.toString());
-            if (dados[i].placa.toString() === p.toString()){
-                console.log(p);
+            if (dados[i].placa.toString() === placa.toString()){
+                console.log(placa);
+                console.log(placa);
+                console.log(linhaTabela);
                 //remove o cliente do array
                 dados.splice(i, 1);
 
@@ -663,6 +805,11 @@ function excluirLinhaVeiculo(p){
             }
         }
     }
+
+    if(dadosVeiculos.length === 0){
+        let botaoAlugar = document.getElementById("btAlugar");
+        botaoAlugar.setAttribute("disabled", "");
+    }
 }
 
 //CARREGAR VEICULOS
@@ -670,28 +817,36 @@ function carregarVeiculos(){
     let dados = JSON.parse(localStorage.getItem('dadosTabelaV')) || [];
     let tabelaVeiculos= document.getElementById('tabelaVeiculos');
 
-    dados.forEach(function(veiculo, i){
-        let placaFormatada = formatarPlaca(veiculo.placa);
-        //let tipoFormatado = formatarTipo(veiculo.tipo);
-        let modeloFormatado = formatarModelo(veiculo.modelo);
+    if(dadosVeiculos.length === 0){
+        let botaoAlugar = document.getElementById("btAlugar");
+        botaoAlugar.setAttribute("disabled", "");
+    }
+
+    for(let i = 0; i < dados.length; i++){
+        let placaFormatada = formatarPlaca(dados[i].placa);
+        let placaS = dados[i].placa.toString();
+        console.log(placaS);
+        let tipoFormatado = formatarTipo(dados[i].tipo);
+        let modeloFormatado = formatarModelo(dados[i].modelo);
         //let anoFormatado = formatarAno(veiculo.ano);
-        let valorFormatado = formatarValor(veiculo.valor);
+        let valorFormatado = formatarValor(dados[i].valor);
         //let kmFormatado = formatarKm(veiculo.km);
 
         //botar <td class="dadosTabela">${tipoFormatado}</td> abaixo depois!!!!!!!!!!
         tabelaVeiculos.innerHTML += `
-            <tr class="linhaTab" id="linha${veiculo.placa}>
-                <td class="dadosTabela">${placaFormatada}</td>
-                <td class="dadosTabela">${modeloFormatado}</td>
-                <td class="dadosTabela">${veiculo.ano}</td>
-                <td class="dadosTabela">${valorFormatado}</td>
-                <td class="dadosTabela">${veiculo.km}</td>
+            <tr class="linhaTab" id="${dados[i].placa}">
+                <td class="dadosTabelaV">${placaFormatada}</td>
+                <td class="dadosTabelaV">${tipoFormatado}</td>
+                <td class="dadosTabelaV">${modeloFormatado}</td>
+                <td class="dadosTabelaV">${dados[i].ano}</td>
+                <td class="dadosTabelaV">${valorFormatado}</td>
+                <td class="dadosTabelaV">${dados[i].km}</td>
                 <td>
-                    <button>Editar</button>
-                    <button id="btlinha" onclick="excluirLinhaVeiculo(${veiculo.placa})">Excluir</button>
+                    <button id="btLinhaV" onclick="editarVeiculo(${placaS})">Editar</button>
+                    <button id="btExcluirV" onclick="excluirLinhaVeiculo(${placaS})">Excluir</button>
                 </td>
             </tr>`;
-    });
+    }
 }
 
 //CRIACAO DO CLIENTE
@@ -702,51 +857,66 @@ function criarVeiculo(p, t, m, a, v, k){ //placa tipo modelo ano valor km
 //BOTAO SALVAR VEICULO
 function salvarVeiculo(){
     let placa = document.getElementById("placaTxt").value.trim();
-    //let tipo = document.querySelector("input[name=carroOuMoto]:checked").value;
+    let tipo = document.querySelectorAll("input[name=carroOuMoto]");
     let modelo = document.getElementById("modeloTxt").value.trim();
     let ano = document.getElementById("anoTxt").value.trim();
     let valor = document.getElementById("valorDTxt").value;
     let km = document.getElementById("kmTxt").value.trim();
-
-    /*if(tipo !== "carro" && tipo !== "moto"){
-        let erro = document.getElementById("tipoErro");
-        erro.innerHTML = "Selecione o tipo!";
-    }*/
+    valor = Number(valor);
 
     let placaV = validarPlaca(placa);
+    var tipoV = validarTipo(tipo);
     let modeloV = validarModelo(modelo);
     let anoV = validarAno(ano);
     let valorV = validarValor(valor);
     let kmV = validarKm(km);
 
-    if(placaV === placa && modeloV === modelo && anoV === ano && valorV > 0 && kmV > 0){
-        veiculo = criarVeiculo(placaV, /*tipoV*/modeloV, anoV, valorV, kmV);
+    console.log(tipoV);
+    if(tipoV !== "carro" && tipoV !== "moto"){
+        let tipoErro = document.getElementById("tipoErro");
+        tipoErro.innerHTML = "Selecione o tipo!";
+    }
+    else{
+        let tipoErro = document.getElementById("tipoErro");
+        tipoErro.innerHTML = "";
+    }
+
+    if(placaV === placa && (tipoV === "carro" || tipoV === "moto") && modeloV === modelo && anoV === ano && valorV > 0 && kmV > 0){
+        veiculo = criarVeiculo(placaV, tipoV, modeloV, anoV, valorV, kmV);
 
         dadosVeiculos.push(veiculo);
         localStorage.setItem('dadosTabelaV', JSON.stringify(dadosVeiculos));
 
         let placaF = formatarPlaca(placaV);
-        /*let tipoF = formatarTipo();*/
+        let tipoF = formatarTipo(tipoV);
         let modeloF = formatarModelo(modeloV);
         let valorF = formatarValor(valorV);
+        console.log(placaV);
 
-        //adicionar a <td class="dadosTabelaV">${cpfF}</td> abaixo depois!!!!!!!!!
         linhaTabelaVeiculo.innerHTML += `
-                    <tr class="linhaTab" id="linha${placaF}">
+                    <tr class="linhaTab" id="${placaV}">
                         <td class="dadosTabelaV">${placaF}</td>
+                        <td class="dadosTabelaV">${tipoF}</td>
                         <td class="dadosTabelaV">${modeloF}</td>
                         <td class="dadosTabelaV">${anoV}</td>
                         <td class="dadosTabelaV">${valorF}</td>
                         <td class="dadosTabelaV">${kmV}</td>
                         <td>
-                            <button id="btlinha"">Editar</button>
-                            <button onclick="excluirLinhaVeiculo(${placaV})">Excluir</button>
+                            <button id="btLinhaV" onclick="editarVeiculo(${placaV})">Editar</button>
+                            <button id="btExcluirV" onclick="excluirLinhaVeiculo(${placaV})">Excluir</button>
                         </td>
                     </tr>`;
 
         consultarVeiculo();
         limparTextoV()
     }
+
+    if(dados.length > 0){
+        let botaoAlugar = document.getElementById("btAlugar");
+        botaoAlugar.setAttribute("enabled", "");
+    }
+
+    //return true;
 }
 
 function main(){
