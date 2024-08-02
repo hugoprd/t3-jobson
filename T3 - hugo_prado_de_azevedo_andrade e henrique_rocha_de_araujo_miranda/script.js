@@ -2,10 +2,6 @@
 var cadastroCliente = document.querySelector(".incluirCliente");
 var consultaCliente = document.querySelector(".consultarCliente");
 var linhaTabelaCliente = document.getElementById('tabelaClientes');
-let cadastroVeiculo = document.querySelector('.incluirVeiculo');
-let consultaVeiculo = document.querySelector('.consultarVeiculo');
-
-
 
 var cadastroVeiculo = document.querySelector('.incluirVeiculo');
 var consultaVeiculo = document.querySelector('.consultarVeiculo');
@@ -254,13 +250,10 @@ function formularioCliente(){
     if(cadastroCliente.style.display == "none"){
         cadastroCliente.style.display = "grid";
         consultaCliente.style.display = "none";
-<<<<<<< HEAD
         
         cadastroVeiculo.style.display = "none";
         consultaVeiculo.style.display = "none";
         
-=======
->>>>>>> cf3706f166c7b28210856edd8fd2f9d315ecca86
         caixaCpf.focus();
     }
     else{
@@ -287,13 +280,10 @@ function formularioVeiculo(){
     if(cadastroVeiculo.style.display == "none"){
         cadastroVeiculo.style.display = "grid";
         consultaVeiculo.style.display = "none";
-<<<<<<< HEAD
         
         cadastroCliente.style.display = "none";
         consultaCliente.style.display = "none";
         
-=======
->>>>>>> cf3706f166c7b28210856edd8fd2f9d315ecca86
         caixaPlaca.focus();
     }
     else{
@@ -301,7 +291,6 @@ function formularioVeiculo(){
     }
 }
 
-<<<<<<< HEAD
 function consultarVeiculo(){    
     if(consultaVeiculo.style.display == "none"){
         consultaVeiculo.style.display = "grid";
@@ -316,8 +305,6 @@ function consultarVeiculo(){
 }
 
 //TABELA CLIENTES
-=======
->>>>>>> cf3706f166c7b28210856edd8fd2f9d315ecca86
 function atualizarTabelaClientes(){
     carregarClientes();
 }
