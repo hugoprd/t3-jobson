@@ -401,7 +401,7 @@ function excluirLinhaCliente(c){
     console.log(c);
     
     if(confirmacao){
-        let dados = JSON.parse(localStorage.getItem('dadosTabela')) || [];
+        //let dados = JSON.parse(localStorage.getItem('dadosTabela')) || [];
         linhaTabela.remove();
 
         for(let i = 0; i < dados.length; i++){
@@ -486,7 +486,7 @@ function formataData(date) {
 
 //CARREGAR CLIENTE 
 function carregarClientes(){
-    let dados = JSON.parse(localStorage.getItem('dadosTabela')) || [];
+    //let dados = JSON.parse(localStorage.getItem('dadosTabela')) || [];
     let tabelaClientes = document.getElementById('tabelaClientes');
     //tabelaClientes.innerHTML = '';
 
@@ -782,7 +782,7 @@ function excluirLinhaVeiculo(placa){
     console.log(linhaTabela);
     
     if(confirmacao){
-        let dados = JSON.parse(localStorage.getItem('dadosTabelaV')) || [];
+        //let dados = JSON.parse(localStorage.getItem('dadosTabelaV')) || [];
         linhaTabela.remove();
         console.log(placa);
         console.log(linhaTabela);
@@ -842,8 +842,8 @@ function carregarVeiculos(){
                 <td class="dadosTabelaV">${valorFormatado}</td>
                 <td class="dadosTabelaV">${dados[i].km}</td>
                 <td>
-                    <button id="btLinhaV" onclick="editarVeiculo(${placaS})">Editar</button>
-                    <button id="btExcluirV" onclick="excluirLinhaVeiculo(${placaS})">Excluir</button>
+                    <button id="btLinhaV" onclick="editarVeiculo('${placaS}')">Editar</button>
+                    <button id="btExcluirV" onclick="excluirLinhaVeiculo('${placaS}')">Excluir</button>
                 </td>
             </tr>`;
     }
@@ -902,8 +902,8 @@ function salvarVeiculo(){
                         <td class="dadosTabelaV">${valorF}</td>
                         <td class="dadosTabelaV">${kmV}</td>
                         <td>
-                            <button id="btLinhaV" onclick="editarVeiculo(${placaV})">Editar</button>
-                            <button id="btExcluirV" onclick="excluirLinhaVeiculo(${placaV})">Excluir</button>
+                            <button id="btLinhaV" onclick="editarVeiculo('${placaV}')">Editar</button>
+                            <button id="btExcluirV" onclick="excluirLinhaVeiculo('${placaV}')">Excluir</button>
                         </td>
                     </tr>`;
 
