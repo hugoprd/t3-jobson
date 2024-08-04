@@ -193,3 +193,9 @@ hr {
 .alugaVeiculo {
     display: none;
 }
+
+#btAlugar:disabled {
+    background-color: grey;
+    color: black;
+    cursor: default;
+}

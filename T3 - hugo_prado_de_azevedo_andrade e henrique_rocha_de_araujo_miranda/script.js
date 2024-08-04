@@ -40,8 +40,6 @@ function limparTextoV(){
     //seleciona os elementos
     let inputElementPlaca = document.getElementById("placaTxt");
     let inputElementTipo = document.querySelectorAll('input[name="carroOuMoto"]');
-    //let inputElementTipo1 = document.getElementById("tipoR1");
-    //let inputElementTipo2 = document.getElementById("tipoR2");
     let inputElementModelo = document.getElementById("modeloTxt");
     let inputElementAno = document.getElementById("anoTxt");
     let inputElementValor = document.getElementById("valorDTxt");
@@ -70,6 +68,17 @@ function limparTextoV(){
     erroValor.innerHTML = "";
     let erroKm = document.getElementById("kmErro");
     erroKm.innerHTML = "";
+}
+
+function limparTextoAlug(){
+    let inputElementSelecao = document.querySelectorAll('input[name="veiculos"]');
+
+    inputElementSelecao.forEach(function(tipo){
+        tipo.checked = false;
+    });
+
+    let erroAlug = document.getElementById("aluguelErro");
+    erroAlug.innerHTML = "";
 }
 
 //VERIFICACAO STRINGS DO CPF ====================================================================================
@@ -316,7 +325,7 @@ function formularioCliente(){
         cadastroVeiculo.style.display = "none";
         consultaVeiculo.style.display = "none";
 
-        alugaVeiculo.style.display == "none";
+        alugaVeiculo.style.display = "none";
         
         caixaCpf.focus();
     }
@@ -335,7 +344,7 @@ function consultarCliente(){
         cadastroVeiculo.style.display = "none";
         consultaVeiculo.style.display = "none";
 
-        alugaVeiculo.style.display == "none";
+        alugaVeiculo.style.display = "none";
     }
     else{
         consultaCliente.style.display = "none";
@@ -363,7 +372,7 @@ function formularioVeiculo(){
         cadastroCliente.style.display = "none";
         consultaCliente.style.display = "none";
 
-        alugaVeiculo.style.display == "none";
+        alugaVeiculo.style.display = "none";
         
         caixaPlaca.focus();
 
@@ -408,7 +417,7 @@ function edicaoVeiculo(){
         cadastroCliente.style.display = "none";
         consultaCliente.style.display = "none";
 
-        alugaVeiculo.style.display == "none";
+        alugaVeiculo.style.display = "none";
         
         caixaValor.focus();
 
@@ -434,14 +443,15 @@ function alugarVeiculo(cpf, nome){
         let pagAlugar = document.getElementById("pessoa");
         let cpfF = formataCpf(cpf);
         let nomeF = formataNome(nome);
-        console.log(pagAlugar);
 
         pagAlugar.innerHTML = `
-            <label>CPF: ${cpfF}</label>
+            <label id="cpfPessoa:${cpf}">CPF: ${cpfF}</label>
             <label>Nome: ${nomeF}</label>
         `;
 
-        alugaVeiculo.style.display == "grid";
+        alugarVeiculoTabela();
+
+        alugaVeiculo.style.display = "grid";
 
         cadastroCliente.style.display = "none";
         consultaCliente.style.display = "none";
@@ -456,9 +466,6 @@ function alugarVeiculo(cpf, nome){
 
 function consultarVeiculo(){ 
     limparTextoV();
-    /*let tabela = document.querySelector(".dadosTabelaV");
-    tabela.innerHTML = "";
-    carregarVeiculos();*/
 
     if(consultaVeiculo.style.display == "none"){
         consultaVeiculo.style.display = "grid";
@@ -466,6 +473,8 @@ function consultarVeiculo(){
         
         cadastroCliente.style.display = "none";
         consultaCliente.style.display = "none";
+
+        alugaVeiculo.style.display = "none";
     }
     else{
         consultaVeiculo.style.display = "none";
@@ -563,15 +572,43 @@ function formataData(date) {
     return junta;
 }
 
-//CARREGAR CLIENTE 
+//CARREGAR CLIENTE ====================================================================================
 function carregarClientes(){
     let tabelaClientes = document.getElementById('tabelaClientes');
-    //tabelaClientes.innerHTML = '';
+    tabelaClientes.innerHTML = "";
+    tabelaClientes.innerHTML += `
+        <tbody>
+            <tr class="cabecalho">
+                <th><button onclick="ordenarCpf()">CPF</button></th>
+                <th><button onclick="ordenarNome()">Nome</button></th>
+                <th>Data de Nascimento</th>
+                <th>Ações</th>
+            </tr>
+        </tbody>
+    `;
 
-    if(dadosVeiculos === 0){
-        let botaoAlugar = document.getElementById("btAlugar");
-        botaoAlugar.setAttribute("disabled", "");
+    /*let aux = 0;
+    if(dadosVeiculos.length > 0){
+        for(let i = 0; i < dadosVeiculos.length; i++){
+            console.log(dadosVeiculos[i].alug);
+            if(dadosVeiculos[i].alug === true){
+                aux++;
+                console.log(aux);
+            }
+            console.log(aux);
+            console.log(dadosVeiculos.length);
+            console.log(aux === dadosVeiculos.length);
+            if(aux === dadosVeiculos.length){
+                let botaoAlugar = document.getElementById("btAlugar");
+                botaoAlugar.setAttribute("disabled", "");
+            }
+        }
     }
+    else{
+        let botaoAlugar = document.getElementById("btAlugar");
+        console.log(botaoAlugar);
+        botaoAlugar.setAttribute("disabled", "");
+    }*/
 
     for(let i = 0; i < dados.length; i++){
         let cpfFormatado = formataCpf(dados[i].cpf);
@@ -584,7 +621,7 @@ function carregarClientes(){
                 <td class="dadosTabela">${nomeFormatado}</td>
                 <td class="dadosTabela">${dataFormatada}</td>
                 <td>
-                    <button id="btlinha"onclick="excluirLinhaCliente('${dados[i].cpf}')">Excluir</button>
+                    <button id="btlinha" onclick="excluirLinhaCliente('${dados[i].cpf}')">Excluir</button>
                     <button id="btAlugar" onclick="alugarVeiculo('${dados[i].cpf}', '${dados[i].nome}')">Alugar</button>
                 </td>
             </tr>`;
@@ -873,6 +910,16 @@ function excluirLinhaVeiculo(placa){
     let linhaTabela = document.getElementById(`${placa}`);
     
     if(confirmacao){
+        for(let i = 0; i < dados.length; i++){
+            for(let j = 0; j < dados[i].veiculos.length; j++){
+                if(linhaTabela === dados[i].veiculos[j]){
+                    dados.veiculos.splice(j, 1);
+
+                    localStorage.setItem('dadosTabela', JSON.stringify(dados));
+                }
+            }
+        }
+
         linhaTabela.remove();
 
         for(let i = 0; i < dadosVeiculos.length; i++){
@@ -890,20 +937,40 @@ function excluirLinhaVeiculo(placa){
         }
     }
 
-    if(dadosVeiculos.length === 0 && dados.length > 0){
-        let botaoAlugar = document.getElementById("btAlugar");
-        botaoAlugar.setAttribute("disabled", "");
+    let aux = 0;
+    for(let i = 0; i < dadosVeiculos.length; i++){
+        if(dadosVeiculos[i].alug === true){
+            aux++;
+        }
+        if(aux === dadosVeiculos.length){
+            let botaoAlugar = document.getElementById("btAlugar");
+            botaoAlugar.setAttribute("disabled", "");
+        }
     }
 }
 
 //CARREGAR VEICULOS ====================================================================================
 function carregarVeiculos(){
     let tabelaVeiculos = document.getElementById('tabelaVeiculos');
+    tabelaVeiculos.innerHTML = "";
+    tabelaVeiculos.innerHTML += `
+        <tbody>
+            <tr class="cabecalho">
+                <th>Placa</th>
+                <th>Tipo</th>
+                <th>Modelo</th>
+                <th>Ano</th>
+                <th>Diária</th>
+                <th>Km</th>
+                <th>Ações</th>
+            </tr>
+        </tbody>
+    `;
 
-    if(dadosVeiculos.length === 0 && dados.length > 0){
+    /*if(dadosVeiculos.length === 0 && dados.length > 0){
         let botaoAlugar = document.getElementById("btAlugar");
         botaoAlugar.setAttribute("disabled", "");
-    }
+    }*/
 
     for(let i = 0; i < dadosVeiculos.length; i++){
         let placaFormatada = formatarPlaca(dadosVeiculos[i].placa);
@@ -929,7 +996,7 @@ function carregarVeiculos(){
 
 //CRIACAO DO CLIENTE ====================================================================================
 function criarVeiculo(p, t, m, a, v, k){ //placa tipo modelo ano valor km
-    return {placa: p, tipo: t, modelo: m, ano: a, valor: v, km: k};
+    return {placa: p, tipo: t, modelo: m, ano: a, valor: v, km: k, alug: false};
 }
 
 //BOTAO SALVAR VEICULO ====================================================================================
@@ -949,7 +1016,6 @@ function salvarVeiculo(){
     let valorV = validarValor(valor);
     let kmV = validarKm(km);
 
-    console.log(tipoV);
     if(tipoV !== "carro" && tipoV !== "moto"){
         let tipoErro = document.getElementById("tipoErro");
         tipoErro.innerHTML = "Selecione o tipo!";
@@ -988,9 +1054,117 @@ function salvarVeiculo(){
         limparTextoV()
     }
 
-    if(dadosVeiculos.length === 0 && dados.length > 0){
+    /*if(dadosVeiculos.length === 0 && dados.length > 0){
         let botaoAlugar = document.getElementById("btAlugar");
         botaoAlugar.setAttribute("disabled", "");
+    }
+    else{
+        let botaoAlugar = document.getElementById("btAlugar");
+        botaoAlugar.removeAttribute("disabled");
+    }*/
+}
+
+//ALUGANDO VEICULO ====================================================================================
+//TABELA DE ALUGAR
+function alugarVeiculoTabela(){
+    let tabelaAluguel = document.getElementById("tabelaAluguel");
+    tabelaAluguel.innerHTML = "";
+    tabelaAluguel.innerHTML = `
+        <tbody>
+            <tr class="cabecalho">
+                <th> </th>
+                <th>Placa</th>
+                <th>Tipo</th>
+                <th>Modelo</th>
+                <th>Ano</th>
+                <th>Diária</th>
+                <th>Km</th>
+            </tr>
+        </tbody>
+    `;
+
+    console.log("oi");
+
+    for(let i = 0; i < dadosVeiculos.length; i++){
+        console.log(dadosVeiculos[i].alug);
+            if(dadosVeiculos[i].alug !== true){
+                        let placaFormatada = formatarPlaca(dadosVeiculos[i].placa);
+                        let placaS = dadosVeiculos[i].placa.toString();
+                        let tipoFormatado = formatarTipo(dadosVeiculos[i].tipo);
+                        let modeloFormatado = formatarModelo(dadosVeiculos[i].modelo);
+                        let valorFormatado = formatarValor(dadosVeiculos[i].valor);
+                        tabelaAluguel.innerHTML += `
+                            <tr class="linhaTabAlug" id="${dadosVeiculos[i].placa}">
+                                <td class="dadosTabelaAlug"><input type="radio" name="veiculos" value="${dadosVeiculos[i].placa}"></td>
+                                <td class="dadosTabelaAlug">${placaFormatada}</td>
+                                <td class="dadosTabelaAlug">${tipoFormatado}</td>
+                                <td class="dadosTabelaAlug">${modeloFormatado}</td>
+                                <td class="dadosTabelaAlug">${dadosVeiculos[i].ano}</td>
+                                <td class="dadosTabelaAlug">${valorFormatado}</td>
+                                <td class="dadosTabelaAlug">${dadosVeiculos[i].km}</td>
+                            </tr>`;
+            }
+            else{
+                console.log("O veiculo " + dadosVeiculos[i] + "já está sendo alugado por outra pessoa!");
+            }
+    }
+}
+
+//VER QUAL VEICULO FOI SELECIONADO
+function validarSelector(t){
+    let tipo = t;
+
+    for(let i = 0; i < tipo.length; i++){
+        if(tipo[i].checked){
+            let ti = tipo[i];
+            let tiS = ti.value.toString();
+    
+            return tiS;
+        }
+    }
+}
+
+//BOTAO SALVAR ALUGUEL
+function salvarAluguel(){
+    let tipo = document.querySelectorAll("input[name=veiculos]");
+    
+    //ver se o box selecionado esta na tabela
+    let selecionado = validarSelector(tipo);
+    for(let i = 0; i < dadosVeiculos.length; i++){
+        if(selecionado !== dadosVeiculos[i].placa){
+            let selecaoErro = document.getElementById("aluguelErro");
+            selecaoErro.innerHTML = "Selecione um veículo para aluguel!";
+        }
+        else if(dadosVeiculos[i].alug === true){
+            let selecaoErro = document.getElementById("aluguelErro");
+            selecaoErro.innerHTML = "Selecione um veículo para aluguel!";
+        }
+        else{
+            let selecaoErro = document.getElementById("aluguelErro");
+            selecaoErro.innerHTML = "";
+
+            let cpfPessoa = document.querySelectorAll('label[id^="cpfPessoa:"]');
+            for(let j = 0; j < cpfPessoa.length; j++){
+                //obter o id do label
+                let id = cpfPessoa[j].id;
+
+                //extrar a parte depois do ":"
+                let partes = id.split(":");
+                let cpfDoLabel = partes[1];
+
+                //comparar o cpf com o do cliente
+                for(let k = 0; k < dados.length; k++){
+                    if(cpfDoLabel === dados[k].cpf){
+                        dados[k].veiculos.push(selecionado);
+                        dadosVeiculos[i].alug = true;
+                        console.log(dadosVeiculos[i]);
+
+                        localStorage.setItem('dadosTabela', JSON.stringify(dados));
+                        localStorage.setItem('dadosTabelaV', JSON.stringify(dadosVeiculos));
+                    }
+                }
+            }
+        }
     }
 }
 
