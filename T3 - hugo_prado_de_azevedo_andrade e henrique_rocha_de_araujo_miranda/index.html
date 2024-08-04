@@ -70,8 +70,11 @@
                             <label>Quilometragem:</label>
                             <input type="text" id="kmTxt"><div class="erros" id="kmErro"></div>
                         </form>
-                        <div class="botaoSalvar">
+                        <div class="botaoSalvarVeiculo">
                             <button onclick="salvarVeiculo()">Salvar</button>
+                        </div>
+                        <div class="botaoSalvarEdicao">
+                            <button>Salvar</button>
                         </div>
                     </div>
                     <div class="consultarVeiculo">
@@ -89,6 +92,26 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="alugaVeiculo">
+                        <h2>Locação de Veículo</h2>
+                        <div id="pessoa">
+                        </div>
+                        <tbody>
+                            <tr class="cabecalho">
+                                <th> </th>
+                                <th>Placa</th>
+                                <th>Placa</th>
+                                <th>Tipo</th>
+                                <th>Modelo</th>
+                                <th>Ano</th>
+                                <th>Diária</th>
+                                <th>Km</th>
+                            </tr>
+                        </tbody>
+                        <!--<div class="botaoAlugar">
+                            <button onclick="salvarAluguel()">Alugar</button>
+                        </div>-->
                     </div>
                 </div>
             </div>

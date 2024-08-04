@@ -181,3 +181,15 @@ hr {
     background-color: gray;
     cursor: default;
 }
+
+.botaoSalvarEdicao {
+    display: none;
+}
+
+.botaoSalvarVeiculo {
+    display: none;
+}
+
+.alugaVeiculo {
+    display: none;
+}
