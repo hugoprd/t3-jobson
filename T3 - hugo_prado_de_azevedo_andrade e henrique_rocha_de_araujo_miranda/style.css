@@ -194,6 +194,18 @@ hr {
     display: none;
 }
 
+.locacaoVeiculo { 
+    display: none;
+}
+
+.devolucaoVeiculo {
+    display: none;
+}
+
+#botaoPraConfirmar {
+    display: none;
+}
+
 #btAlugar:disabled {
     background-color: grey;
     color: black;

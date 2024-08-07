@@ -16,7 +16,7 @@
                             <dd><button onclick="formularioVeiculo()">Incluir</button></dd>
                             <dd><button onclick="consultarVeiculo()">Consultar</button></dd>
                         <dt>Locação</dt>
-                            <dd><button>Consultar</button></dd>
+                            <dd><button onclick="consultarLocacao()">Consultar</button></dd>
                     </dl>
                 </div>
                 <div class="lado">
@@ -66,7 +66,7 @@
                             <label>Ano:</label>
                             <input type="text" id="anoTxt"><div class="erros" id="anoErro"></div>
                             <label>Valor da diária:</label>
-                            <input type="float" id="valorDTxt"><div class="erros" id="valorDErro"></div>
+                            <input type="number" id="valorDTxt"><div class="erros" id="valorDErro"></div>
                             <label>Quilometragem:</label>
                             <input type="text" id="kmTxt"><div class="erros" id="kmErro"></div>
                         </form>
@@ -114,6 +114,29 @@
                             <button onclick="salvarAluguel()">Alugar</button>
                         </div>
                         <div class="erros" id="aluguelErro"></div>
+                    </div>
+                    <div class="locacaoVeiculo">
+                        <h2>Locações</h2>
+                        <table id="tabelaLocacoes">
+                            <tbody>
+                                <tr class="cabecalho">
+                                    <th>CPF</th>
+                                    <th>Nome</th>
+                                    <th>Placa</th>
+                                    <th>Modelo</th>
+                                    <th>Diária</th>
+                                    <th>Data de Locação</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="devolucaoVeiculo" id="devolverVeiculo">
+                        <div id="resto">
+                        </div>
+                        <div id="botaoPraConfirmar">
+                            <button id="botaoConfirmar">Confirmar</button>
+                        </div>
                     </div>
                 </div>
             </div>
