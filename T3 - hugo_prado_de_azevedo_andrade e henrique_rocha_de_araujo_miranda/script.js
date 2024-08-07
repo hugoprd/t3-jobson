@@ -725,7 +725,7 @@ function carregarClientes(){
 
 //CRIACAO DO CLIENTE ====================================================================================
 function criarCliente(c, n, d){ //cpf nome data
-    return {cpf: c, nome: n, data: d, veiculos: []};
+    return {cpf: c, nome: n, data: d, veiculos: [], dataLoc: []};
 }
 
 //ACAO DO BOTAO DE SALVAR CLIENTE ====================================================================================
@@ -1307,7 +1307,7 @@ function salvarAluguel(){
                         let mes = String(dat.getMonth() + 1).padStart(2, '0');
                         let dia = String(dat.getDate()).padStart(2, '0');
                         let datFormat = `${dia}/${mes}/${ano}`;
-                        dados[k].veiculos.push(datFormat);
+                        dados[k].dataLoc.push(datFormat);
 
                         dadosVeiculos[i].alug = true;
                         console.log(dadosVeiculos[i]);
@@ -1377,7 +1377,7 @@ function carregarLocacoes(){
                                         <td>${placaFormat}</td>
                                         <td>${modeloFormat}</td>
                                         <td>${diariaFormat}</td>
-                                        <td>${veic}</td>
+                                        <td>${dados[i].dataLoc[k]}</td>
                                         <td>
                                             <button onclick="devolverVeiculo('${dadosVeiculos[j].placa}')">Devolver</button>
                                         </td>
@@ -1425,7 +1425,10 @@ function confirmarDevolucaoVeiculo(p){
                             let placaRemov = p;
                             if(dados[i].veiculos && Array.isArray(dados[i].veiculos)){
                                 dados[i].veiculos = dados[i].veiculos.filter(plac => !plac.includes(placaRemov));
-                                console.log(dados[i].veiculos.splice(i+1, 1));
+                                let index = dados[i].veiculos.findIndex(veiculos => veiculos[k] === placaRemov);
+                                console.log(index);
+                                dados[i].dataLoc[index].splice(index, 1);
+                                console.log(dados[i].dataLoc[index].splice(index, 1));
                             }
                             localStorage.setItem('dadosTabela', JSON.stringify(dados));
 
@@ -1473,7 +1476,7 @@ function devolverVeiculo(placa){
                                 <label>Modelo: ${modeloFormat}</label>
                                 <label>Diária: ${diariaFormat}</label>
                                 <label>Quilometragem: ${dadosVeiculos[j].km}</label>
-                                <label>Data da locação: ${veic}</label>
+                                <label>Data da locação: ${dados[i].dataLoc[k]}</label>
                                 <label>Quilometragem atual: <input type="numer" id="kmAtualTxt"></input></label><div class="erros" id="kmAtualErro"></div>
                             </form>
                         `;
