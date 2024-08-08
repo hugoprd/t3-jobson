@@ -1359,30 +1359,36 @@ function carregarLocacoes(){
         for(let i = 0; i < dados.length; i++){
             for(let j = 0; j < dadosVeiculos.length; j++){
                 for(let k = 0; k < dados[i].veiculos.length; k++){
-                    if(dados[i].veiculos.length > 0){
-                        if(dadosVeiculos[j].placa === dados[i].veiculos[k]){
-                            if(dadosVeiculos[j].alug === true){
-                                let cpfFormat = formataCpf(dados[i].cpf);
-                                let nomeFormat = formataNome(dados[i].nome);
-                                let placaFormat = formatarPlaca(dadosVeiculos[j].placa);
-                                let modeloFormat = formatarModelo(dadosVeiculos[j].modelo);
-                                let diariaFormat = formatarValor(dadosVeiculos[j].valor);
-                                let veic = dados[i].veiculos[k+1];
-                                let dataFormat = verificarData(veic);
-                    
-                                tabelaLocacao.innerHTML += `
-                                    <tr class="linhaTabLoc" id="${dados[i].cpf}">
-                                        <td>${cpfFormat}</td>
-                                        <td>${nomeFormat}</td>
-                                        <td>${placaFormat}</td>
-                                        <td>${modeloFormat}</td>
-                                        <td>${diariaFormat}</td>
-                                        <td>${dados[i].dataLoc[k]}</td>
-                                        <td>
-                                            <button onclick="devolverVeiculo('${dadosVeiculos[j].placa}')">Devolver</button>
-                                        </td>
-                                    </tr>
-                                `;
+                    for(let l = 0; l < dados[i].dataLoc.length; l++){
+                        console.log(dados[i].dataLoc[l]);
+                        if(dados[i].veiculos.length > 0){
+                            console.log(dados[i].dataLoc[l]);
+                            if(dadosVeiculos[j].placa === dados[i].veiculos[k]){
+                                console.log(dados[i].dataLoc[l]);
+                                if(dadosVeiculos[j].alug === true){
+                                    console.log(dados[i].dataLoc[l]);
+                                    let cpfFormat = formataCpf(dados[i].cpf);
+                                    let nomeFormat = formataNome(dados[i].nome);
+                                    let placaFormat = formatarPlaca(dadosVeiculos[j].placa);
+                                    let modeloFormat = formatarModelo(dadosVeiculos[j].modelo);
+                                    let diariaFormat = formatarValor(dadosVeiculos[j].valor);
+                                    let veic = dados[i].veiculos[k+1];
+                                    let dataFormat = verificarData(veic);
+                        
+                                    tabelaLocacao.innerHTML += `
+                                        <tr class="linhaTabLoc" id="${dados[i].cpf}">
+                                            <td>${cpfFormat}</td>
+                                            <td>${nomeFormat}</td>
+                                            <td>${placaFormat}</td>
+                                            <td>${modeloFormat}</td>
+                                            <td>${diariaFormat}</td>
+                                            <td>${dados[i].dataLoc[l]}</td>
+                                            <td>
+                                                <button onclick="devolverVeiculo('${dadosVeiculos[j].placa}', '${dados[i].dataLoc[l]}')">Devolver</button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }
                             }
                         }
                     }
@@ -1399,44 +1405,44 @@ function aparecerConfirmar(){
 }
 
 //CONFIRMAR DEVOLUCAO
-function confirmarDevolucaoVeiculo(p){
+function confirmarDevolucaoVeiculo(p, d){
     let texto = document.getElementById("kmAtualTxt").value;
 
     for(let i = 0; i < dados.length; i++){
         for(let j = 0; j < dadosVeiculos.length; j++){
             for(let k = 0; k < dados[i].veiculos.length; k++){
-                if(dadosVeiculos[j].placa === p){
-                    if(texto === null || texto === undefined){
-                        let erro = document.getElementById("kmAtualErro");
-                        erro.innerHTML = "Valor da quilometragem inválido! Valor deve ser maior que a quilometragem atual do veículo.";
-                    }
-                    else if(texto < dadosVeiculos[j].km){
-                        let erro = document.getElementById("kmAtualErro");
-                        erro.innerHTML = "Valor da quilometragem inválido! Valor deve ser maior que a quilometragem atual do veículo.";
-                    }
-                    else{
-                        if(dados[i].veiculos[k] === p){
-                            console.log(dados[i].veiculos[k]);
-                            console.log(dadosVeiculos[j]);
-                            dadosVeiculos[j].alug = false;
-                            dadosVeiculos[j].km = texto;
-                            localStorage.setItem('dadosTabelaV', JSON.stringify(dadosVeiculos));
-            
-                            let placaRemov = p;
-                            if(dados[i].veiculos && Array.isArray(dados[i].veiculos)){
-                                dados[i].veiculos = dados[i].veiculos.filter(plac => !plac.includes(placaRemov));
-                                let index = dados[i].veiculos.findIndex(veiculos => veiculos[k] === placaRemov);
-                                console.log(index);
-                                dados[i].dataLoc[index].splice(index, 1);
-                                console.log(dados[i].dataLoc[index].splice(index, 1));
+                for(let l = 0; l < dados[i].dataLoc.length; l++){
+                    if(dadosVeiculos[j].placa === p){
+                        if(texto === null || texto === undefined){
+                            let erro = document.getElementById("kmAtualErro");
+                            erro.innerHTML = "Valor da quilometragem inválido! Valor deve ser maior que a quilometragem atual do veículo.";
+                        }
+                        else if(texto < dadosVeiculos[j].km){
+                            let erro = document.getElementById("kmAtualErro");
+                            erro.innerHTML = "Valor da quilometragem inválido! Valor deve ser maior que a quilometragem atual do veículo.";
+                        }
+                        else{
+                            if(dados[i].veiculos[k] === p){
+                                console.log(dados[i].veiculos[k]);
+                                console.log(dadosVeiculos[j]);
+                                dadosVeiculos[j].alug = false;
+                                dadosVeiculos[j].km = texto;
+                                localStorage.setItem('dadosTabelaV', JSON.stringify(dadosVeiculos));
+                
+                                let data = d;
+                                let placaRemov = p;
+                                if(dados[i].veiculos && Array.isArray(dados[i].veiculos)){
+                                    dados[i].veiculos = dados[i].veiculos.filter(plac => !plac.includes(placaRemov));
+                                    dados[i].dataLoc = dados[i].veiculos.filter(dat => !dat.includes(d));
+                                }
+                                localStorage.setItem('dadosTabela', JSON.stringify(dados));
+    
+                                console.log(dados[i].veiculos);
+                                console.log(dadosVeiculos[j]);
+                
+                                limparTextoDevo();
+                                consultarLocacao();
                             }
-                            localStorage.setItem('dadosTabela', JSON.stringify(dados));
-
-                            console.log(dados[i].veiculos);
-                            console.log(dadosVeiculos[j]);
-            
-                            limparTextoDevo();
-                            consultarLocacao();
                         }
                     }
                 }
@@ -1447,7 +1453,7 @@ function confirmarDevolucaoVeiculo(p){
     desabilitarAlug();
 }
 
-function devolverVeiculo(placa){
+function devolverVeiculo(placa, data){
     telaDevolucaoVeiculo();
     aparecerConfirmar();
 
@@ -1476,7 +1482,7 @@ function devolverVeiculo(placa){
                                 <label>Modelo: ${modeloFormat}</label>
                                 <label>Diária: ${diariaFormat}</label>
                                 <label>Quilometragem: ${dadosVeiculos[j].km}</label>
-                                <label>Data da locação: ${dados[i].dataLoc[k]}</label>
+                                <label>Data da locação: ${data}</label>
                                 <label>Quilometragem atual: <input type="numer" id="kmAtualTxt"></input></label><div class="erros" id="kmAtualErro"></div>
                             </form>
                         `;
@@ -1489,7 +1495,7 @@ function devolverVeiculo(placa){
     let botao = document.getElementById("botaoConfirmar");
 
     botao.onclick = () => {
-        confirmarDevolucaoVeiculo(placa);
+        confirmarDevolucaoVeiculo(placa, data);
     }
 }
 
