@@ -64,6 +64,7 @@ h2 {
     background-color: rgb(167, 210, 236);
     color: rgb(0, 0, 0);
     margin-right: 5%;
+    font-weight: normal;
 }
 
 .forms {
@@ -162,7 +163,7 @@ td button {
     display: none;
 }
 
-button {
+button{
     padding: 3px 5px 3px 5px;
     font-size: 1.05rem;
     background-color: rgb(3, 80, 132);
@@ -170,11 +171,17 @@ button {
     border: 1px solid rgb(3, 80, 132);
     margin: 3px 0px 3px 0px;
     cursor: pointer;
-    }
+}
+
+th button{
+    width: 100%;
+    font-size: 32px;
+    font-weight: bold;
+}
 
 hr {
     border: 1px inset rgb(136, 196, 234);
-    }
+}
 
 #text {
     display: none;
