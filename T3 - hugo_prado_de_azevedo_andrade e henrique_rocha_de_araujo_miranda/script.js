@@ -265,11 +265,12 @@ function validarNome(name){
 //VERIFICACAO DATA ====================================================================================
 function validarIdade(data){
     const hora = 60 * 60 * 1000;
-
     let dataN = new Date(data);
     let dataAtual = new Date();
-    let diferenca = dataAtual.getTime() - dataN.getTime() - (3 * hora);
-    let idade = Math.floor(diferenca / (1000 * 60 * 60 * 24 * 365.25));
+    let diferenca = dataAtual.getTime() - dataN.getTime();
+    console.log(diferenca);
+    let idade = Math.floor((diferenca - hora * 21) / ((1000 * 60 * 60 * 24 * 365.25)));
+    console.log(idade);
 
     let erro = document.getElementById("dataErro");
 
@@ -1057,17 +1058,16 @@ function carregarVeiculos(){
     let tabelaVeiculos = document.getElementById('tabelaVeiculos');
     tabelaVeiculos.innerHTML = "";
     tabelaVeiculos.innerHTML += `
-        <tbody>
-            <tr class="cabecalho">
-                <th>Placa</th>
-                <th>Tipo</th>
-                <th>Modelo</th>
-                <th>Ano</th>
-                <th>Diária</th>
-                <th>Km</th>
-                <th>Ações</th>
-            </tr>
-        </tbody>
+        
+         <tr class="cabecalho">
+            <th>Placa</th>
+            <th>Tipo</th>
+            <th>Modelo</th>
+            <th>Ano</th>
+            <th>Diária</th>
+            <th>Km</th>
+            <th>Ações</th>
+        </tr>
     `;
 
     if(dadosVeiculos === null || dadosVeiculos === undefined){

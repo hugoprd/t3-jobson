@@ -97,7 +97,11 @@ h2 {
     font-weight: bold;
 }
 
-.linhaTab:hover {
+.linhaTabC:hover {
+    background-color: #a2e4fa;
+}
+
+.linhaTabV:hover {
     background-color: #a2e4fa;
 }
 
