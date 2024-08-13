@@ -44,16 +44,43 @@ function desabilitarAlug(){
                 if(dadosVeiculos[i].alug === true){
                     aux++;
                     console.log(aux);
+
+                    if(aux === dadosVeiculos.length){
+                        let botaoAlugar = document.querySelectorAll('[id="btAlugar"]');
+                        botaoAlugar.forEach(botaoAlugar => {
+                            botaoAlugar.setAttribute("disabled", "");
+                        });
+                    }
                 }
-                console.log(aux);
-                console.log(dadosVeiculos.length);
-                console.log(aux === dadosVeiculos.length);
-                if(aux === dadosVeiculos.length){
+                else{
                     let botaoAlugar = document.querySelectorAll('[id="btAlugar"]');
-                    botaoAlugar.forEach(botaoAlugar => {
-                        botaoAlugar.setAttribute("disabled", "");
+                        botaoAlugar.forEach(botaoAlugar => {
+                            botaoAlugar.removeAttribute("disabled");
                     });
                 }
+            }
+        }
+        else{
+            let botaoAlugar = document.querySelectorAll('[id="btAlugar"]');
+                botaoAlugar.forEach(botaoAlugar => {
+                    botaoAlugar.setAttribute("disabled", "");
+            });
+        }
+    }
+}
+
+function desabilitarBotExc(){
+    if(dadosVeiculos === null || dadosVeiculos === undefined || dadosVeiculos === 0){
+        console.log("n tem veiculo");
+    }
+    else{
+        for(let i = 0; i < dadosVeiculos.length; i++){
+            let exc = document.getElementById(`btExcluirV${dadosVeiculos[i].placa}`);
+            if(dadosVeiculos[i].alug === true){
+                exc.setAttribute("disabled", "");
+            }
+            else{
+                exc.removeAttribute("disabled");
             }
         }
     }
@@ -265,11 +292,12 @@ function validarNome(name){
 //VERIFICACAO DATA ====================================================================================
 function validarIdade(data){
     const hora = 60 * 60 * 1000;
-
     let dataN = new Date(data);
     let dataAtual = new Date();
-    let diferenca = dataAtual.getTime() - dataN.getTime() - (3 * hora);
-    let idade = Math.floor(diferenca / (1000 * 60 * 60 * 24 * 365.25));
+    let diferenca = dataAtual.getTime() - dataN.getTime();
+    console.log(diferenca);
+    let idade = Math.floor((diferenca - hora * 21) / ((1000 * 60 * 60 * 24 * 365.25)));
+    console.log(idade);
 
     let erro = document.getElementById("dataErro");
 
@@ -316,7 +344,7 @@ function ordenarCpf(){
                 <td class="dadosTabela">${name}</td>
                 <td class="dadosTabela">${data}</td>
                 <td>
-                    <button id="btlinha" onclick="excluirLinhaCliente('${dados[i].cpf}')">Excluir</button>
+                    <button id="btlinha${dados[i].cpf}" onclick="excluirLinhaCliente('${dados[i].cpf}')">Excluir</button>
                     <button id="btAlugar" onclick="alugarVeiculo('${dados[i].cpf}', '${dados[i].nome}')">Alugar</button>
                 </td>
             </tr>`;
@@ -357,7 +385,7 @@ function ordenarNome(){
                 <td class="dadosTabela">${name}</td>
                 <td class="dadosTabela">${data}</td>
                 <td>
-                    <button id="btlinha" onclick="excluirLinhaCliente('${dados[i].cpf}')">Excluir</button>
+                    <button id="btlinha${dados[i].cpf}" onclick="excluirLinhaCliente('${dados[i].cpf}')">Excluir</button>
                     <button id="btAlugar" onclick="alugarVeiculo('${dados[i].cpf}', '${dados[i].nome}')">Alugar</button>
                 </td>
             </tr>`;
@@ -714,18 +742,28 @@ function carregarClientes(){
                 <td class="dadosTabela">${nomeFormatado}</td>
                 <td class="dadosTabela">${dataFormatada}</td>
                 <td>
-                    <button id="btlinha" onclick="excluirLinhaCliente('${dados[i].cpf}')">Excluir</button>
+                    <button id="btlinha${dados[i].cpf}" onclick="excluirLinhaCliente('${dados[i].cpf}')">Excluir</button>
                     <button id="btAlugar" onclick="alugarVeiculo('${dados[i].cpf}', '${dados[i].nome}')">Alugar</button>
                 </td>
             </tr>`;
     }
 
     desabilitarAlug();
+
+    for(let i = 0; i < dados.length; i++){
+        let exc = document.getElementById(`btlinha${dados[i].cpf}`);
+        if(dados[i].veiculos.length >= 1){
+            exc.setAttribute("disabled", "");
+        }
+        else{
+            exc.removeAttribute("disabled");
+        }
+    }
 }
 
 //CRIACAO DO CLIENTE ====================================================================================
 function criarCliente(c, n, d){ //cpf nome data
-    return {cpf: c, nome: n, data: d, veiculos: [], dataLoc: []};
+    return {cpf: c, nome: n, data: d, veiculos: []};
 }
 
 //ACAO DO BOTAO DE SALVAR CLIENTE ====================================================================================
@@ -785,7 +823,7 @@ function salvarCliente(){
                 <td class="dadosTabela">${name}</td>
                 <td class="dadosTabela">${data}</td>
                 <td>
-                    <button id="btlinha" onclick="excluirLinhaCliente('${cpf}')">Excluir</button>
+                    <button id="btlinha${cpf}" onclick="excluirLinhaCliente('${cpf}')">Excluir</button>
                     <button id="btAlugar" onclick="alugarVeiculo('${cpf}', '${nome}')">Alugar</button>
                 </td>
             </tr>`;
@@ -793,6 +831,16 @@ function salvarCliente(){
         desabilitarAlug();
         consultarCliente();
         limparTextoC();
+
+        for(let i = 0; i < dados.length; i++){
+            let exc = document.getElementById(`btlinha${dados[i].cpf}`);
+            if(dados[i].veiculos.length >= 1){
+                exc.setAttribute("disabled", "");
+            }
+            else{
+                exc.removeAttribute("disabled");
+            }
+        }
     }
 }
 
@@ -1057,17 +1105,16 @@ function carregarVeiculos(){
     let tabelaVeiculos = document.getElementById('tabelaVeiculos');
     tabelaVeiculos.innerHTML = "";
     tabelaVeiculos.innerHTML += `
-        <tbody>
-            <tr class="cabecalho">
-                <th>Placa</th>
-                <th>Tipo</th>
-                <th>Modelo</th>
-                <th>Ano</th>
-                <th>Diária</th>
-                <th>Km</th>
-                <th>Ações</th>
-            </tr>
-        </tbody>
+        
+         <tr class="cabecalho">
+            <th>Placa</th>
+            <th>Tipo</th>
+            <th>Modelo</th>
+            <th>Ano</th>
+            <th>Diária</th>
+            <th>Km</th>
+            <th>Ações</th>
+        </tr>
     `;
 
     if(dadosVeiculos === null || dadosVeiculos === undefined){
@@ -1090,26 +1137,21 @@ function carregarVeiculos(){
                     <td class="dadosTabelaV">${dadosVeiculos[i].km}</td>
                     <td>
                         <button id="btLinhaV" onclick="editarVeiculo('${placaS}')">Editar</button>
-                        <button id="btExcluirV" onclick="excluirLinhaVeiculo('${placaS}')">Excluir</button>
+                        <button id="btExcluirV${dadosVeiculos[i].placa}" onclick="excluirLinhaVeiculo('${placaS}')">Excluir</button>
                     </td>
                 </tr>`;
         }
     
-        let aux = 0;
-        if(dadosVeiculos.length > 0){
-            for(let i = 0; i < dadosVeiculos.length; i++){
-                console.log(dadosVeiculos[i].alug);
-                if(dadosVeiculos[i].alug === true){
-                    aux++;
-                    console.log(aux);
-                }
-                console.log(aux);
-                console.log(dadosVeiculos.length);
-                console.log(aux === dadosVeiculos.length);
-                if(aux === dadosVeiculos.length){
-                    let botaoAlugar = document.getElementById("btAlugar");
-                    botaoAlugar.setAttribute("disabled", "");
-                }
+        desabilitarAlug();
+        desabilitarBotExc();
+
+        for(let i = 0; i < dados.length; i++){
+            let exc = document.getElementById(`btlinha${dados[i].cpf}`);
+            if(dados[i].veiculos.length >= 1){
+                exc.setAttribute("disabled", "");
+            }
+            else{
+                exc.removeAttribute("disabled");
             }
         }
     }
@@ -1117,7 +1159,7 @@ function carregarVeiculos(){
 
 //CRIACAO DO CLIENTE ====================================================================================
 function criarVeiculo(p, t, m, a, v, k){ //placa tipo modelo ano valor km
-    return {placa: p, tipo: t, modelo: m, ano: a, valor: v, km: k, alug: false};
+    return {placa: p, tipo: t, modelo: m, ano: a, valor: v, km: k, alug: false, dataLoc: "0"};
 }
 
 //BOTAO SALVAR VEICULO ====================================================================================
@@ -1167,31 +1209,26 @@ function salvarVeiculo(){
                         <td class="dadosTabelaV">${kmV}</td>
                         <td>
                             <button id="btLinhaV" onclick="editarVeiculo('${placaV}')">Editar</button>
-                            <button id="btExcluirV" onclick="excluirLinhaVeiculo('${placaV}')">Excluir</button>
+                            <button id="btExcluirV${placaV}" onclick="excluirLinhaVeiculo('${placaV}')">Excluir</button>
                         </td>
                     </tr>`;
 
         consultarVeiculo();
-        limparTextoV()
-    }
+        limparTextoV();
 
-    let aux = 0;
-    if(dadosVeiculos.length > 0){
-        for(let i = 0; i < dadosVeiculos.length; i++){
-            console.log(dadosVeiculos[i].alug);
-            if(dadosVeiculos[i].alug === true){
-                aux++;
-                console.log(aux);
+        for(let i = 0; i < dados.length; i++){
+            let exc = document.getElementById(`btlinha${dados[i].cpf}`);
+            if(dados[i].veiculos.length >= 1){
+                exc.setAttribute("disabled", "");
             }
-            console.log(aux);
-            console.log(dadosVeiculos.length);
-            console.log(aux === dadosVeiculos.length);
-            if(aux === dadosVeiculos.length){
-                let botaoAlugar = document.getElementById("btAlugar");
-                botaoAlugar.setAttribute("disabled", "");
+            else{
+                exc.removeAttribute("disabled");
             }
         }
     }
+
+    desabilitarAlug();
+    desabilitarBotExc();
 }
 
 //ALUGANDO VEICULO ====================================================================================
@@ -1236,21 +1273,16 @@ function alugarVeiculoTabela(){
         }
     }
 
-    let aux = 0;
-    if(dadosVeiculos.length > 0){
-        for(let i = 0; i < dadosVeiculos.length; i++){
-            console.log(dadosVeiculos[i].alug);
-            if(dadosVeiculos[i].alug === true){
-                aux++;
-                console.log(aux);
-            }
-            console.log(aux);
-            console.log(dadosVeiculos.length);
-            console.log(aux === dadosVeiculos.length);
-            if(aux === dadosVeiculos.length){
-                let botaoAlugar = document.getElementById("btAlugar");
-                botaoAlugar.setAttribute("disabled", "");
-            }
+    desabilitarAlug();
+    desabilitarBotExc();
+
+    for(let i = 0; i < dados.length; i++){
+        let exc = document.getElementById(`btlinha${dados[i].cpf}`);
+        if(dados[i].veiculos.length >= 1){
+            exc.setAttribute("disabled", "");
+        }
+        else{
+            exc.removeAttribute("disabled");
         }
     }
 }
@@ -1307,9 +1339,9 @@ function salvarAluguel(){
                         let mes = String(dat.getMonth() + 1).padStart(2, '0');
                         let dia = String(dat.getDate()).padStart(2, '0');
                         let datFormat = `${dia}/${mes}/${ano}`;
-                        dados[k].dataLoc.push(datFormat);
 
                         dadosVeiculos[i].alug = true;
+                        dadosVeiculos[i].dataLoc = datFormat;
                         console.log(dadosVeiculos[i]);
 
                         localStorage.setItem('dadosTabela', JSON.stringify(dados));
@@ -1320,6 +1352,18 @@ function salvarAluguel(){
                     }
                 }
             }
+        }
+    }
+
+    desabilitarBotExc();
+
+    for(let i = 0; i < dados.length; i++){
+        let exc = document.getElementById(`btlinha${dados[i].cpf}`);
+        if(dados[i].veiculos.length >= 1){
+            exc.setAttribute("disabled", "");
+        }
+        else{
+            exc.removeAttribute("disabled");
         }
     }
 }
@@ -1359,36 +1403,33 @@ function carregarLocacoes(){
         for(let i = 0; i < dados.length; i++){
             for(let j = 0; j < dadosVeiculos.length; j++){
                 for(let k = 0; k < dados[i].veiculos.length; k++){
-                    for(let l = 0; l < dados[i].dataLoc.length; l++){
-                        console.log(dados[i].dataLoc[l]);
-                        if(dados[i].veiculos.length > 0){
-                            console.log(dados[i].dataLoc[l]);
-                            if(dadosVeiculos[j].placa === dados[i].veiculos[k]){
-                                console.log(dados[i].dataLoc[l]);
-                                if(dadosVeiculos[j].alug === true){
-                                    console.log(dados[i].dataLoc[l]);
-                                    let cpfFormat = formataCpf(dados[i].cpf);
-                                    let nomeFormat = formataNome(dados[i].nome);
-                                    let placaFormat = formatarPlaca(dadosVeiculos[j].placa);
-                                    let modeloFormat = formatarModelo(dadosVeiculos[j].modelo);
-                                    let diariaFormat = formatarValor(dadosVeiculos[j].valor);
-                                    let veic = dados[i].veiculos[k+1];
-                                    let dataFormat = verificarData(veic);
+                    //console.log(dados[i]);
+                    if(dados[i].veiculos.length > 0){
+                        //console.log(dadosVeiculos[j].placa === dados[i].veiculos[k]);
+                        if(dadosVeiculos[j].placa === dados[i].veiculos[k]){
+                            //console.log(dadosVeiculos[j].alug === true);
+                            if(dadosVeiculos[j].alug === true){
+                                console.log(dados[i]);
+                                console.log(dados[i].veiculos[k]);
+                                let cpfFormat = formataCpf(dados[i].cpf);
+                                let nomeFormat = formataNome(dados[i].nome);
+                                let placaFormat = formatarPlaca(dadosVeiculos[j].placa);
+                                let modeloFormat = formatarModelo(dadosVeiculos[j].modelo);
+                                let diariaFormat = formatarValor(dadosVeiculos[j].valor);
                         
-                                    tabelaLocacao.innerHTML += `
-                                        <tr class="linhaTabLoc" id="${dados[i].cpf}">
-                                            <td>${cpfFormat}</td>
-                                            <td>${nomeFormat}</td>
-                                            <td>${placaFormat}</td>
-                                            <td>${modeloFormat}</td>
-                                            <td>${diariaFormat}</td>
-                                            <td>${dados[i].dataLoc[l]}</td>
-                                            <td>
-                                                <button onclick="devolverVeiculo('${dadosVeiculos[j].placa}', '${dados[i].dataLoc[l]}')">Devolver</button>
-                                            </td>
-                                        </tr>
-                                    `;
-                                }
+                                tabelaLocacao.innerHTML += `
+                                    <tr class="linhaTabLoc" id="${dados[i].cpf}">
+                                        <td>${cpfFormat}</td>
+                                        <td>${nomeFormat}</td>
+                                        <td>${placaFormat}</td>
+                                        <td>${modeloFormat}</td>
+                                        <td>${diariaFormat}</td>
+                                        <td>${dadosVeiculos[j].dataLoc}</td>
+                                        <td>
+                                            <button onclick="devolverVeiculo('${dadosVeiculos[j].placa}', '${dadosVeiculos[i].dataLoc}')">Devolver</button>
+                                        </td>
+                                    </tr>
+                                `;
                             }
                         }
                     }
@@ -1396,6 +1437,8 @@ function carregarLocacoes(){
             }
         }
     }
+
+    desabilitarBotExc();
 }
 
 //DEVOLVER VEICULO ====================================================================================
@@ -1411,38 +1454,48 @@ function confirmarDevolucaoVeiculo(p, d){
     for(let i = 0; i < dados.length; i++){
         for(let j = 0; j < dadosVeiculos.length; j++){
             for(let k = 0; k < dados[i].veiculos.length; k++){
-                for(let l = 0; l < dados[i].dataLoc.length; l++){
-                    if(dadosVeiculos[j].placa === p){
-                        if(texto === null || texto === undefined){
-                            let erro = document.getElementById("kmAtualErro");
-                            erro.innerHTML = "Valor da quilometragem inválido! Valor deve ser maior que a quilometragem atual do veículo.";
-                        }
-                        else if(texto < dadosVeiculos[j].km){
-                            let erro = document.getElementById("kmAtualErro");
-                            erro.innerHTML = "Valor da quilometragem inválido! Valor deve ser maior que a quilometragem atual do veículo.";
-                        }
-                        else{
-                            if(dados[i].veiculos[k] === p){
-                                console.log(dados[i].veiculos[k]);
-                                console.log(dadosVeiculos[j]);
-                                dadosVeiculos[j].alug = false;
-                                dadosVeiculos[j].km = texto;
-                                localStorage.setItem('dadosTabelaV', JSON.stringify(dadosVeiculos));
+                if(dadosVeiculos[j].placa === p){
+                    if(texto === null || texto === undefined){
+                        let erro = document.getElementById("kmAtualErro");
+                        erro.innerHTML = "Valor da quilometragem inválido! Valor deve ser maior que a quilometragem atual do veículo.";
+                    }
+                    else if(texto < dadosVeiculos[j].km){
+                        let erro = document.getElementById("kmAtualErro");
+                        erro.innerHTML = "Valor da quilometragem inválido! Valor deve ser maior que a quilometragem atual do veículo.";
+                    }
+                    else{
+                        if(dados[i].veiculos[k] === p){
+                            console.log(dados[i].veiculos[k]);
+                            console.log(dadosVeiculos[j]);
+                            dadosVeiculos[j].alug = false;
+                            dadosVeiculos[j].km = texto;
+                            dadosVeiculos[j].dataLoc = "";
+                            localStorage.setItem('dadosTabelaV', JSON.stringify(dadosVeiculos));
                 
-                                let data = d;
-                                let placaRemov = p;
-                                if(dados[i].veiculos && Array.isArray(dados[i].veiculos)){
-                                    dados[i].veiculos = dados[i].veiculos.filter(plac => !plac.includes(placaRemov));
-                                    dados[i].dataLoc = dados[i].veiculos.filter(dat => !dat.includes(d));
-                                }
-                                localStorage.setItem('dadosTabela', JSON.stringify(dados));
-    
-                                console.log(dados[i].veiculos);
-                                console.log(dadosVeiculos[j]);
-                
-                                limparTextoDevo();
-                                consultarLocacao();
+                            let data = d;
+                            let placaRemov = p;
+                            if(dados[i].veiculos && Array.isArray(dados[i].veiculos)){
+                                dados[i].veiculos = dados[i].veiculos.filter(plac => !plac.includes(placaRemov));
                             }
+                            localStorage.setItem('dadosTabela', JSON.stringify(dados));
+    
+                            console.log(dados[i].veiculos);
+                            console.log(dadosVeiculos[j]);
+                
+                            limparTextoDevo();
+                            consultarLocacao();
+
+                            for(let i = 0; i < dados.length; i++){
+                                let exc = document.getElementById(`btlinha${dados[i].cpf}`);
+                                if(dados[i].veiculos.length >= 1){
+                                    exc.setAttribute("disabled", "");
+                                }
+                                else{
+                                    exc.removeAttribute("disabled");
+                                }
+                            }
+
+                            break;
                         }
                     }
                 }
@@ -1451,6 +1504,7 @@ function confirmarDevolucaoVeiculo(p, d){
     }
 
     desabilitarAlug();
+    desabilitarBotExc();
 }
 
 function devolverVeiculo(placa, data){
@@ -1497,6 +1551,8 @@ function devolverVeiculo(placa, data){
     botao.onclick = () => {
         confirmarDevolucaoVeiculo(placa, data);
     }
+
+    desabilitarBotExc();
 }
 
 //MAIN ====================================================================================
@@ -1506,7 +1562,7 @@ function main(){
     console.log(dadosSalvos);
     console.log(dadosSalvosV);
 
-    if(dadosSalvos && dadosSalvosV){
+    if(dadosSalvos || dadosSalvosV){
         dados = JSON.parse(dadosSalvos);
         console.log({dados});
 
