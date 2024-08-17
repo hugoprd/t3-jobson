@@ -487,7 +487,7 @@ function formularioVeiculo(){
     }
 }
 
-function edicaoVeiculo(){
+function edicaoVeiculo(id){
     let caixaValor = document.getElementById('valorDTxt');
 
     let placaValor = document.getElementById("placaTxt");
@@ -513,8 +513,13 @@ function edicaoVeiculo(){
 
         locacaoVeiculo.style.display = "none";
         devolucaoVeiculo.style.display = "none";
-        
-        caixaValor.focus();
+
+        for(let i = 0; i < dadosVeiculos.length; i++){
+            if(dadosVeiculos[i].placa === id){
+                caixaValor.value = dadosVeiculos[i].valor;
+            }
+        }
+        caixaValor.select();
 
         placaValor.disabled = true;
         modeloValor.disabled = true;
@@ -1009,7 +1014,7 @@ function validarKm(k){
 
 //EDITAR VEICULOS ====================================================================================
 function editarVeiculo(placa){
-    edicaoVeiculo();
+    edicaoVeiculo(placa);
     let botao = document.querySelector(".botaoSalvarEdicao");
 
     botao.onclick = () => {
@@ -1562,13 +1567,22 @@ function main(){
     console.log(dadosSalvos);
     console.log(dadosSalvosV);
 
-    if(dadosSalvos || dadosSalvosV){
+    if(dadosSalvos !== null){
         dados = JSON.parse(dadosSalvos);
         console.log({dados});
+    }
+    else{
+        dados = [];
+    }
 
+    if(dadosSalvosV !== null){
         dadosVeiculos = JSON.parse(dadosSalvosV);
         console.log({dadosVeiculos});
     }
+    else{
+        dadosVeiculos = [];
+    }
+
     carregarClientes();
     carregarVeiculos();
     carregarLocacoes();
