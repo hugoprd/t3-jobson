@@ -317,28 +317,40 @@ function validarIdade(data){
 
 //ORDENAR COISAS ====================================================================================
 function ordenarCpf(){
-    let tabela = document.querySelectorAll(".linhaTabC");
+    let tabela = document.getElementById("tabelaClientes");
     tabela.innerHTML = "";
+    tabela.innerHTML = `
+        <tbody>
+            <tr class="cabecalho">
+                <th><button onclick="ordenarCpf()">CPF</button></th>
+                <th><button onclick="ordenarNome()">Nome</button></th>
+                <th>Data de Nascimento</th>
+                <th>Ações</th>
+            </tr>
+        </tbody>
+    `;
 
     dados.sort((a,b) =>{
         let cpfIntA = parseInt(a.cpf);
         let cpfIntB = parseInt(b.cpf);
 
-        if(a.cpf < b.cpf){
+        if(cpfIntA < cpfIntB){
             return -1;
         }
-        if(a.cpf > b.cpf){
+        if(cpfIntA > cpfIntB){
             return 1;
         }
         return 0;
     });
+
+    localStorage.setItem('dadosTabela', JSON.stringify(dados));
 
     for(let i = 0; i < dados.length; i++){
         let name = formataNome(dados[i].nome);
         let cpfF = formataCpf(dados[i].cpf);
         let data = formataData(dados[i].data);
 
-        let linhaNova = `
+        tabela.innerHTML += `
             <tr class="linhaTabC" id="${dados[i].cpf}">
                 <td class="dadosTabela">${cpfF}</td>
                 <td class="dadosTabela">${name}</td>
@@ -347,16 +359,24 @@ function ordenarCpf(){
                     <button id="btlinha${dados[i].cpf}" onclick="excluirLinhaCliente('${dados[i].cpf}')">Excluir</button>
                     <button id="btAlugar" onclick="alugarVeiculo('${dados[i].cpf}', '${dados[i].nome}')">Alugar</button>
                 </td>
-            </tr>`;
-
-            tabela.innerHTML += linhaNova;
-            console.log({tabela});
+            </tr>
+        `;
     }
 }
 
 function ordenarNome(){
-    let tabela = document.querySelectorAll(".linhaTabC");
+    let tabela = document.getElementById("tabelaClientes");
     tabela.innerHTML = "";
+    tabela.innerHTML = `
+        <tbody>
+            <tr class="cabecalho">
+                <th><button onclick="ordenarCpf()">CPF</button></th>
+                <th><button onclick="ordenarNome()">Nome</button></th>
+                <th>Data de Nascimento</th>
+                <th>Ações</th>
+            </tr>
+        </tbody>
+    `;
 
     dados.sort((a,b) =>{
         console.log(a);
@@ -370,16 +390,14 @@ function ordenarNome(){
         return 0;
     });
 
+    localStorage.setItem('dadosTabela', JSON.stringify(dados));
+
     for(let i = 0; i < dados.length; i++){
         let name = formataNome(dados[i].nome);
         let cpfF = formataCpf(dados[i].cpf);
         let data = formataData(dados[i].data);
 
-        console.log(dados);
-        console.log(dados.length);
-        console.log(dados[i]);
-
-        let linhaNova = `
+        tabela.innerHTML += `
             <tr class="linhaTabC" id="${dados[i].cpf}">
                 <td class="dadosTabela">${cpfF}</td>
                 <td class="dadosTabela">${name}</td>
@@ -388,10 +406,8 @@ function ordenarNome(){
                     <button id="btlinha${dados[i].cpf}" onclick="excluirLinhaCliente('${dados[i].cpf}')">Excluir</button>
                     <button id="btAlugar" onclick="alugarVeiculo('${dados[i].cpf}', '${dados[i].nome}')">Alugar</button>
                 </td>
-            </tr>`;
-
-            tabela.innerHTML += linhaNova;
-            console.log({tabela});
+            </tr>
+        `;
     }
 }
 
@@ -1459,12 +1475,13 @@ function confirmarDevolucaoVeiculo(p, d){
     for(let i = 0; i < dados.length; i++){
         for(let j = 0; j < dadosVeiculos.length; j++){
             for(let k = 0; k < dados[i].veiculos.length; k++){
+                console.log(texto < dadosVeiculos[j].km);
                 if(dadosVeiculos[j].placa === p){
                     if(texto === null || texto === undefined){
                         let erro = document.getElementById("kmAtualErro");
                         erro.innerHTML = "Valor da quilometragem inválido! Valor deve ser maior que a quilometragem atual do veículo.";
                     }
-                    else if(texto < dadosVeiculos[j].km){
+                    else if(texto <= dadosVeiculos[j].km){
                         let erro = document.getElementById("kmAtualErro");
                         erro.innerHTML = "Valor da quilometragem inválido! Valor deve ser maior que a quilometragem atual do veículo.";
                     }
@@ -1551,6 +1568,9 @@ function devolverVeiculo(placa, data){
         }
     }
 
+    let kmTxt = document.getElementById("kmAtualTxt");
+    kmTxt.focus();
+
     let botao = document.getElementById("botaoConfirmar");
 
     botao.onclick = () => {
@@ -1558,6 +1578,7 @@ function devolverVeiculo(placa, data){
     }
 
     desabilitarBotExc();
+    carregarVeiculos();
 }
 
 //MAIN ====================================================================================
