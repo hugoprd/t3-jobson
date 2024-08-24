@@ -257,9 +257,10 @@ function validarCpf(cpfN){
                         let erro = document.getElementById("cpfErro");
                         erro.innerHTML = "CPF inválido!";
                     }
-                }else{
+                }
+                else{
                     let erro = document.getElementById("cpfErro");
-                    erro.innerHTML = "CPF inválido!";
+                    erro.innerHTML = "CPF já cadastrado.";
                 }
             }else{
                 let erro = document.getElementById("cpfErro");
@@ -362,6 +363,8 @@ function ordenarCpf(){
             </tr>
         `;
     }
+
+    desabilitarAlug();
 }
 
 function ordenarNome(){
@@ -409,6 +412,8 @@ function ordenarNome(){
             </tr>
         `;
     }
+
+    desabilitarAlug();
 }
 
 //MOSTRAR E ESCONDER OS TOPICOS ====================================================================================
@@ -533,6 +538,16 @@ function edicaoVeiculo(id){
         for(let i = 0; i < dadosVeiculos.length; i++){
             if(dadosVeiculos[i].placa === id){
                 caixaValor.value = dadosVeiculos[i].valor;
+                placaValor.value = dadosVeiculos[i].placa;
+                modeloValor.value = dadosVeiculos[i].modelo;
+                if(dadosVeiculos[i].tipo == "carro"){
+                    tipoValor1.value = dadosVeiculos[i].tipo;
+                }
+                else if(dadosVeiculos[i].tipo == "moto"){
+                    tipoValor2.value = dadosVeiculos[i].tipo;
+                }
+                anoValor.value = dadosVeiculos[i].ano;
+                kmValor.value = dadosVeiculos[i].km;
             }
         }
         caixaValor.select();
@@ -555,7 +570,10 @@ function edicaoVeiculo(id){
 }
 
 function alugarVeiculo(cpf, nome){
+    let alugValor = document.getElementById("aluguelErro");
+
     if(alugaVeiculo.style.display == "none"){
+        alugValor.innerHTML = "";
         let pagAlugar = document.getElementById("pessoa");
         let cpfF = formataCpf(cpf);
         let nomeF = formataNome(nome);
@@ -1500,9 +1518,6 @@ function confirmarDevolucaoVeiculo(p, d){
                                 dados[i].veiculos = dados[i].veiculos.filter(plac => !plac.includes(placaRemov));
                             }
                             localStorage.setItem('dadosTabela', JSON.stringify(dados));
-    
-                            console.log(dados[i].veiculos);
-                            console.log(dadosVeiculos[j]);
                 
                             limparTextoDevo();
                             consultarLocacao();
@@ -1516,6 +1531,7 @@ function confirmarDevolucaoVeiculo(p, d){
                                     exc.removeAttribute("disabled");
                                 }
                             }
+                            carregarVeiculos();
 
                             break;
                         }
@@ -1558,7 +1574,7 @@ function devolverVeiculo(placa, data){
                                 <label>Modelo: ${modeloFormat}</label>
                                 <label>Diária: ${diariaFormat}</label>
                                 <label>Quilometragem: ${dadosVeiculos[j].km}</label>
-                                <label>Data da locação: ${data}</label>
+                                <label>Data da locação: ${dadosVeiculos[j].dataLoc}</label>
                                 <label>Quilometragem atual: <input type="numer" id="kmAtualTxt"></input></label><div class="erros" id="kmAtualErro"></div>
                             </form>
                         `;
