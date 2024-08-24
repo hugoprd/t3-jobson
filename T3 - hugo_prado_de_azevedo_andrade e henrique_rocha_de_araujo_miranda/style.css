@@ -106,7 +106,11 @@ h2 {
     background-color: #a2e4fa;
 }
 
-tbody:nth-child(even){
+.linhaTabLoc:hover {
+    background-color: #a2e4fa;
+}
+
+tbody{
     background-color: #cbd2e0;
 }
 
@@ -195,10 +199,14 @@ hr {
 
 .botaoSalvarEdicao {
     display: none;
+    margin-top: 2%;
+    border-top:solid rgb(3, 80, 132) ;
 }
 
 .botaoSalvarVeiculo {
     display: none;
+    margin-top: 2%;
+    border-top:solid rgb(3, 80, 132) ;
 }
 
 .alugaVeiculo {
@@ -215,6 +223,20 @@ hr {
 
 #botaoPraConfirmar {
     display: none;
+}
+
+#resto form{
+    display: flex;
+    flex-direction: column;
+}
+
+input{
+    vertical-align: middle;
+}
+
+#botaoPraConfirmar{
+    border-top: solid rgb(3, 80, 132);
+    margin-top: 2%;
 }
 
 button:disabled {

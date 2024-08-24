@@ -685,6 +685,10 @@ function excluirLinhaCliente(cpf){
                 //salva o array atualizado de volta no localStorage
                 localStorage.setItem('dadosTabela', JSON.stringify(dados));
 
+                atualizarTabelaClientes();
+
+
+
                 //linhaTabela.innerHTML = "";
                 
                 break; //interrompe o loop após encontrar e remover o cliente
@@ -786,7 +790,6 @@ function carregarClientes(){
                 </td>
             </tr>`;
     }
-
     desabilitarAlug();
 
     for(let i = 0; i < dados.length; i++){
@@ -1113,7 +1116,8 @@ function excluirLinhaVeiculo(placa){
                 //salva o array atualizado de volta no localStorage
                 localStorage.setItem('dadosTabelaV', JSON.stringify(dadosVeiculos));
 
-                //linhaTabela.innerHTML = "";
+                carregarVeiculos();
+                
                 
                 break; //interrompe o loop após encontrar e remover o cliente
             }
@@ -1575,7 +1579,7 @@ function devolverVeiculo(placa, data){
                                 <label>Diária: ${diariaFormat}</label>
                                 <label>Quilometragem: ${dadosVeiculos[j].km}</label>
                                 <label>Data da locação: ${dadosVeiculos[j].dataLoc}</label>
-                                <label>Quilometragem atual: <input type="numer" id="kmAtualTxt"></input></label><div class="erros" id="kmAtualErro"></div>
+                                <label>Quilometragem atual: <input type="number" id="kmAtualTxt"></input></label><div class="erros" id="kmAtualErro"></div>
                             </form>
                         `;
                     }
