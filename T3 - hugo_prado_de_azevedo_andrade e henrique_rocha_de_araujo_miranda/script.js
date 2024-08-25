@@ -471,9 +471,18 @@ function formularioVeiculo(){
     let tipoValor2 = document.getElementById("tipoR2");
     let anoValor = document.getElementById("anoTxt");
     let kmValor = document.getElementById("kmTxt");
+    let valorValor = document.getElementById('valorDTxt');
 
     let botao1 = document.querySelector(".botaoSalvarVeiculo");
     let botao2 = document.querySelector(".botaoSalvarEdicao");
+
+    placaValor.value = '';
+    modeloValor.value = '';
+    tipoValor1.value = '';
+    tipoValor2.value = '';
+    anoValor.value = '';
+    valorValor.value = '';
+    kmValor.value = '';
     
     if(cadastroVeiculo.style.display == "none"){
         cadastroVeiculo.style.display = "grid";
@@ -1599,6 +1608,7 @@ function devolverVeiculo(placa, data){
 
     desabilitarBotExc();
     carregarVeiculos();
+    carregarLocacoes();
 }
 
 //MAIN ====================================================================================
