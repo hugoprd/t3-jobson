@@ -1575,7 +1575,7 @@ function devolverVeiculo(placa, data){
                                 <label>Diária: ${diariaFormat}</label>
                                 <label>Quilometragem: ${dadosVeiculos[j].km}</label>
                                 <label>Data da locação: ${dadosVeiculos[j].dataLoc}</label>
-                                <label>Quilometragem atual: <input type="numer" id="kmAtualTxt"></input></label><div class="erros" id="kmAtualErro"></div>
+                                <label>Quilometragem atual: <input type="number" id="kmAtualTxt"></input></label><div class="erros" id="kmAtualErro"></div>
                             </form>
                         `;
                     }
