@@ -471,9 +471,18 @@ function formularioVeiculo(){
     let tipoValor2 = document.getElementById("tipoR2");
     let anoValor = document.getElementById("anoTxt");
     let kmValor = document.getElementById("kmTxt");
+    let valorValor = document.getElementById('valorDTxt');
 
     let botao1 = document.querySelector(".botaoSalvarVeiculo");
     let botao2 = document.querySelector(".botaoSalvarEdicao");
+
+    placaValor.value = '';
+    modeloValor.value = '';
+    tipoValor1.value = '';
+    tipoValor2.value = '';
+    anoValor.value = '';
+    valorValor.value = '';
+    kmValor.value = '';
     
     if(cadastroVeiculo.style.display == "none"){
         cadastroVeiculo.style.display = "grid";
@@ -685,6 +694,10 @@ function excluirLinhaCliente(cpf){
                 //salva o array atualizado de volta no localStorage
                 localStorage.setItem('dadosTabela', JSON.stringify(dados));
 
+                atualizarTabelaClientes();
+
+
+
                 //linhaTabela.innerHTML = "";
                 
                 break; //interrompe o loop após encontrar e remover o cliente
@@ -786,7 +799,6 @@ function carregarClientes(){
                 </td>
             </tr>`;
     }
-
     desabilitarAlug();
 
     for(let i = 0; i < dados.length; i++){
@@ -1113,7 +1125,8 @@ function excluirLinhaVeiculo(placa){
                 //salva o array atualizado de volta no localStorage
                 localStorage.setItem('dadosTabelaV', JSON.stringify(dadosVeiculos));
 
-                //linhaTabela.innerHTML = "";
+                carregarVeiculos();
+                
                 
                 break; //interrompe o loop após encontrar e remover o cliente
             }
@@ -1595,6 +1608,7 @@ function devolverVeiculo(placa, data){
 
     desabilitarBotExc();
     carregarVeiculos();
+    carregarLocacoes();
 }
 
 //MAIN ====================================================================================
